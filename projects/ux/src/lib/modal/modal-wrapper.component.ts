@@ -9,12 +9,10 @@ import {
   OnDestroy,
   Type,
   ViewChild,
-  ViewContainerRef
+  ViewContainerRef,
 } from '@angular/core';
 
-import {
-  Observable
-} from 'rxjs';
+import { Observable } from 'rxjs';
 
 import { ModalConfig } from './modal-config';
 import { ModalSize } from './modal-size';
@@ -23,7 +21,7 @@ import { ModalSize } from './modal-size';
   selector: 'gd-modal-wrapper',
   templateUrl: './modal-wrapper.component.html',
   styleUrls: ['./modal-wrapper.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ModalWrapperComponent implements OnDestroy {
   public get closed(): Observable<void> {
@@ -39,16 +37,16 @@ export class ModalWrapperComponent implements OnDestroy {
   }
 
   @ViewChild('target', { read: ViewContainerRef, static: true })
-  private targetRef: ViewContainerRef;
+  private targetRef: ViewContainerRef | undefined;
 
   private _closed = new EventEmitter<void>();
-  private _size: ModalSize;
+  private _size: ModalSize = ModalSize.Medium;
 
   constructor(
     private changeDetector: ChangeDetectorRef,
     private resolver: ComponentFactoryResolver,
-    private injector: Injector
-  ) { }
+    private injector: Injector,
+  ) {}
 
   public ngOnDestroy(): void {
     this._closed.complete();
@@ -56,14 +54,18 @@ export class ModalWrapperComponent implements OnDestroy {
 
   public attach<T>(component: Type<T>, config: ModalConfig): ComponentRef<T> {
     const injector = Injector.create({
-      providers: config.providers,
-      parent: this.injector
+      providers: config.providers || [],
+      parent: this.injector,
     });
 
     const factory = this.resolver.resolveComponentFactory(component);
-    const componentRef = this.targetRef.createComponent(factory, undefined, injector);
+    const componentRef = this.targetRef!.createComponent(
+      factory,
+      undefined,
+      injector,
+    );
 
-    this.size = config.size;
+    this.size = config.size || ModalSize.Medium;
     this.changeDetector.markForCheck();
 
     return componentRef;

@@ -11,10 +11,8 @@
     {{ message }}
   </p>
 
-  <p *ngIf="supplemental"
-    class="gd-confirm-supplemental"
-  >
-  {{ supplemental }}
+  <p *ngIf="supplemental" class="gd-confirm-supplemental">
+    {{ supplemental }}
   </p>
 
   <div class="gd-button-group-fluid">
@@ -29,7 +27,8 @@
     <button
       class="gd-button gd-button-default"
       type="button"
-      (click)="cancel()">
+      (click)="cancel()"
+    >
       Cancel
     </button>
   </div>

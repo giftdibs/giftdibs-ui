@@ -6,5 +6,5 @@ export enum IconStyle {
   Primary = 'primary',
   Secondary = 'secondary',
   Success = 'success',
-  Warning = 'warning'
+  Warning = 'warning',
 }

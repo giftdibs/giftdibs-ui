@@ -1,10 +1,6 @@
-import {
-  ElementRef
-} from '@angular/core';
+import { ElementRef } from '@angular/core';
 
-import {
-  AffixConfig
-} from '../affix/affix-config';
+import { AffixConfig } from '../affix/affix-config';
 
 export interface PopoverConfig {
   trigger: ElementRef;

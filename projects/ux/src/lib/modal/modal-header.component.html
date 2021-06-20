@@ -2,15 +2,13 @@
   <div class="gd-modal-header-body">
     <ng-content></ng-content>
   </div>
-  <button *ngIf="showCloseButton"
+  <button
+    *ngIf="showCloseButton"
     class="gd-button gd-modal-header-button-close"
     type="button"
     title="Close"
     (click)="onCloseClick()"
   >
-    <i
-      class="fa fa-times"
-      aria-hidden="true">
-    </i>
+    <i class="fa fa-times" aria-hidden="true"> </i>
   </button>
 </div>

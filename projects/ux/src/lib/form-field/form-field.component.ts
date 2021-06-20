@@ -5,41 +5,35 @@ import {
   Component,
   ContentChild,
   Input,
-  OnChanges
+  OnChanges,
 } from '@angular/core';
-
-import {
-  FormArray,
-  FormControlName
-} from '@angular/forms';
+import { FormArray, FormControlName } from '@angular/forms';
 
 @Component({
   selector: 'gd-form-field',
   templateUrl: './form-field.component.html',
   styleUrls: ['./form-field.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FormFieldComponent implements AfterContentInit, OnChanges {
   @Input()
-  public errors: any[];
+  public errors: any[] = [];
 
-  @ContentChild(FormControlName, { static: false })
-  public controlName: FormControlName;
+  @ContentChild(FormControlName)
+  public controlName: FormControlName | undefined;
 
   public errorMessages: string[] = [];
 
-  constructor(
-    private changeDetector: ChangeDetectorRef
-  ) { }
+  constructor(private changeDetector: ChangeDetectorRef) {}
 
   public ngAfterContentInit(): void {
     if (!this.controlName) {
       return;
     }
 
-    this.controlName.valueAccessor.registerOnTouched(() => {
+    this.controlName?.valueAccessor?.registerOnTouched(() => {
       this.errors = [];
-      this.controlName.control.markAsTouched();
+      this.controlName?.control.markAsTouched();
       this.changeDetector.markForCheck();
       this.updateErrorMessages();
     });
@@ -52,9 +46,13 @@ export class FormFieldComponent implements AfterContentInit, OnChanges {
   }
 
   public updateErrorMessages(): void {
-    const control = this.controlName.control;
-
     this.errorMessages = [];
+
+    if (!this.controlName) {
+      return;
+    }
+
+    const control = this.controlName.control;
 
     if (!control.errors) {
       return;
@@ -63,11 +61,11 @@ export class FormFieldComponent implements AfterContentInit, OnChanges {
     Object.keys(control.errors).forEach((key: string) => {
       switch (key) {
         case 'required':
-        this.errorMessages.push('This field is required.');
-        break;
+          this.errorMessages.push('This field is required.');
+          break;
         case 'validation':
-        this.errorMessages.push(control.errors[key]);
-        break;
+          this.errorMessages.push(control.errors![key]);
+          break;
       }
     });
 
@@ -88,9 +86,9 @@ export class FormFieldComponent implements AfterContentInit, OnChanges {
         field = fragments[fragments.length - 1];
       }
 
-      if (field === this.controlName.name) {
-        const formGroup = this.controlName.control.parent;
-        const formArray = formGroup.parent;
+      if (field === this.controlName?.name) {
+        const formGroup = this.controlName?.control.parent;
+        const formArray = formGroup?.parent;
 
         // This form control is part of a form array.
         // Check to make sure the error from the server
@@ -103,8 +101,8 @@ export class FormFieldComponent implements AfterContentInit, OnChanges {
         }
 
         hasErrors = true;
-        this.controlName.control.setErrors({
-          validation: err.message
+        this.controlName?.control.setErrors({
+          validation: err.message,
         });
       }
     });

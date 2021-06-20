@@ -1,6 +1,4 @@
-import {
-  StaticProvider
-} from '@angular/core';
+import { StaticProvider } from '@angular/core';
 
 export interface OverlayConfig {
   destroyOnOverlayClick?: boolean;

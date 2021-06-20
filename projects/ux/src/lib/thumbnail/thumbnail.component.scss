@@ -30,9 +30,9 @@ $gd-thumbnail-default-size: 160px;
   position: relative;
 
   &:before {
-    content: "";
+    content: '';
     display: block;
-    padding-top: 100%; 	/* initial ratio of 1:1*/
+    padding-top: 100%; /* initial ratio of 1:1*/
   }
 }
 
@@ -101,9 +101,9 @@ $gd-thumbnail-default-size: 160px;
     height: 100%;
 
     &:before {
-      content: "";
+      content: '';
       display: block;
-      padding-top: 100%; 	/* initial ratio of 1:1*/
+      padding-top: 100%; /* initial ratio of 1:1*/
     }
   }
 

@@ -1,22 +1,14 @@
+import { AnimationEvent } from '@angular/animations';
 import {
   ChangeDetectionStrategy,
   Component,
   OnDestroy,
-  OnInit
+  OnInit,
 } from '@angular/core';
 
-import {
-  AnimationEvent
-} from '@angular/animations';
+import { Observable, Subject } from 'rxjs';
 
-import {
-  Observable,
-  Subject
-} from 'rxjs';
-
-import {
-  gdAnimationEmerge
-} from '../animation/emerge';
+import { gdAnimationEmerge } from '../animation/emerge';
 
 import { Alert } from './alert';
 import { AlertContext } from './alert-context';
@@ -26,21 +18,19 @@ import { AlertContext } from './alert-context';
   templateUrl: './alert.component.html',
   styleUrls: ['./alert.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  animations: [
-    gdAnimationEmerge
-  ]
+  animations: [gdAnimationEmerge],
 })
 export class AlertComponent implements OnInit, OnDestroy {
   public get ariaLive(): string {
     let live: string;
 
-    switch (this.alert.type) {
+    switch (this.alert?.type) {
       case 'danger':
-      live = 'assertive';
-      break;
+        live = 'assertive';
+        break;
       default:
-      live = 'polite';
-      break;
+        live = 'polite';
+        break;
     }
 
     return live;
@@ -50,14 +40,13 @@ export class AlertComponent implements OnInit, OnDestroy {
     return this._closed;
   }
 
-  public alert: Alert;
+  public alert: Alert | undefined;
+
   public animationState: 'open' | 'closed' = 'closed';
 
   private _closed = new Subject<void>();
 
-  constructor(
-    private context: AlertContext
-  ) { }
+  constructor(private context: AlertContext) {}
 
   public ngOnInit(): void {
     this.alert = this.context.alert;

@@ -5,9 +5,7 @@
   }"
 >
   <ng-content></ng-content>
-  <div *ngIf="errorMessages.length > 0"
-    class="gd-form-field-subscript"
-  >
+  <div *ngIf="errorMessages.length > 0" class="gd-form-field-subscript">
     <div *ngFor="let message of errorMessages">
       {{ message }}
     </div>

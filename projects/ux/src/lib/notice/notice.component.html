@@ -1,12 +1,15 @@
-<div
-  class="gd-notice"
-  [ngClass]="'gd-notice-' + noticeType"
->
+<div class="gd-notice" [ngClass]="'gd-notice-' + noticeType">
   <div class="gd-notice-indicator">
     <gd-icon *ngIf="noticeType === 'success'" icon="check"></gd-icon>
     <gd-icon *ngIf="noticeType === 'info'" icon="question-circle"></gd-icon>
-    <gd-icon *ngIf="noticeType === 'warning'" icon="exclamation-circle"></gd-icon>
-    <gd-icon *ngIf="noticeType === 'danger'" icon="exclamation-triangle"></gd-icon>
+    <gd-icon
+      *ngIf="noticeType === 'warning'"
+      icon="exclamation-circle"
+    ></gd-icon>
+    <gd-icon
+      *ngIf="noticeType === 'danger'"
+      icon="exclamation-triangle"
+    ></gd-icon>
   </div>
   <div class="gd-notice-content">
     <div class="gd-notice-heading" role="heading">

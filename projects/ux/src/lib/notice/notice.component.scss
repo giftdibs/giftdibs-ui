@@ -2,11 +2,9 @@
 
 .gd-notice {
   margin: $gd-spacing 0;
-  border-radius: $gd-border-radius-sm;
+  border-radius: $gd-border-radius;
   display: flex;
   background-color: #fff;
-  box-shadow: $gd-box-shadow;
-  border: 1px solid transparent;
   overflow: hidden;
 
   ::ng-deep {

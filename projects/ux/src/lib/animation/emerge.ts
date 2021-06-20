@@ -4,27 +4,34 @@ import {
   state,
   style,
   transition,
-  trigger
+  trigger,
 } from '@angular/animations';
+
 // #endregion
 
 const TRANSITION_SPEED = '200ms ease-in-out';
 
 export const gdAnimationEmerge = trigger('gdAnimationEmerge', [
-  state('open', style({
-    opacity: 1,
-    transform: 'initial'
-  })),
-  state('closed', style({
-    opacity: 0,
-    transform: 'scale(0.0)'
-  })),
+  state(
+    'open',
+    style({
+      opacity: 1,
+      transform: 'initial',
+    }),
+  ),
+  state(
+    'closed',
+    style({
+      opacity: 0,
+      transform: 'scale(0.0)',
+    }),
+  ),
   transition('void => *', [
     style({
       opacity: 0,
-      transform: 'scale(0.0)'
+      transform: 'scale(0.0)',
     }),
-    animate(TRANSITION_SPEED)
+    animate(TRANSITION_SPEED),
   ]),
-  transition(`* <=> *`, animate(TRANSITION_SPEED))
+  transition(`* <=> *`, animate(TRANSITION_SPEED)),
 ]);

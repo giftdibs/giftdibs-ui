@@ -1,19 +1,17 @@
-import {
-  Pipe,
-  PipeTransform
-} from '@angular/core';
+import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
   name: 'gdFriendlyDate',
-  pure: true
+  pure: true,
 })
 export class FriendlyDatePipe implements PipeTransform {
-
   public transform(value: string): string {
     const date = new Date(value);
     const now = new Date();
 
-    const seconds = Math.round(Math.abs((now.getTime() - date.getTime()) / 1000));
+    const seconds = Math.round(
+      Math.abs((now.getTime() - date.getTime()) / 1000),
+    );
 
     if (Number.isNaN(seconds)) {
       return '';

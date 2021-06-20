@@ -1,38 +1,37 @@
 import {
   ElementRef,
   Injectable,
-  Renderer2
+  Renderer2,
+  RendererFactory2,
 } from '@angular/core';
 
 import { AffixConfig } from './affix-config';
 import { AffixHorizontalAlignment } from './affix-horizontal-alignment';
 import { AffixVerticalAlignment } from './affix-vertical-alignment';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class AffixService {
-  constructor(
-    private renderer: Renderer2
-  ) { }
+  private renderer: Renderer2;
+
+  constructor(rendererFactory: RendererFactory2) {
+    this.renderer = rendererFactory.createRenderer(undefined, null);
+  }
 
   public affixTo(
     subject: ElementRef,
     target: ElementRef,
-    config?: AffixConfig
+    config?: AffixConfig,
   ): void {
     const defaults: AffixConfig = {
       horizontalAlignment: AffixHorizontalAlignment.Left,
-      verticalAlignment: AffixVerticalAlignment.Top
+      verticalAlignment: AffixVerticalAlignment.Top,
     };
 
     // Reset the height.
-    this.renderer.removeStyle(
-      subject.nativeElement,
-      'height'
-    );
-    this.renderer.removeStyle(
-      subject.nativeElement,
-      'width'
-    );
+    this.renderer.removeStyle(subject.nativeElement, 'height');
+    this.renderer.removeStyle(subject.nativeElement, 'width');
 
     const settings = Object.assign({}, defaults, config);
     const subjectRect = subject.nativeElement.getBoundingClientRect();
@@ -42,24 +41,24 @@ export class AffixService {
     switch (settings.verticalAlignment) {
       default:
       case 'top':
-      top = targetRect.top - subjectRect.height;
-      break;
+        top = targetRect.top - subjectRect.height;
+        break;
 
       case 'bottom':
-      top = targetRect.bottom;
-      break;
+        top = targetRect.bottom;
+        break;
     }
 
     let left: number;
     switch (settings.horizontalAlignment) {
       default:
       case 'left':
-      left = targetRect.left;
-      break;
+        left = targetRect.left;
+        break;
 
       case 'right':
-      left = targetRect.right - subjectRect.width;
-      break;
+        left = targetRect.right - subjectRect.width;
+        break;
     }
 
     if (top < 0) {
@@ -76,12 +75,15 @@ export class AffixService {
 
     // If subject's bottom is below viewport, set its height to accommodate.
     // See: https://stackoverflow.com/a/8876069/6178885
-    const viewportHeight = Math.max(document.documentElement.clientHeight, window.innerHeight || 0);
+    const viewportHeight = Math.max(
+      document.documentElement.clientHeight,
+      window.innerHeight || 0,
+    );
     if (subjectRect.height + top >= viewportHeight) {
       this.renderer.setStyle(
         subject.nativeElement,
         'height',
-        `${viewportHeight - top}px`
+        `${viewportHeight - top}px`,
       );
     }
 
@@ -93,7 +95,7 @@ export class AffixService {
       this.renderer.setStyle(
         subject.nativeElement,
         'width',
-        `${viewportWidth - left}px`
+        `${viewportWidth - left}px`,
       );
     }
   }

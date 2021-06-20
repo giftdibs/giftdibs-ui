@@ -7,43 +7,23 @@ import {
   OnDestroy,
   TemplateRef,
   ViewChild,
-  ViewContainerRef
+  ViewContainerRef,
 } from '@angular/core';
 
-import {
-  fromEvent,
-  Observable,
-  Subject
-} from 'rxjs';
+import { fromEvent, Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
-import {
-  takeUntil
-} from 'rxjs/operators';
+import { AffixService } from '../affix/affix.service';
+import { GD_FOCUSABLE_SELECTORS } from '../shared/focusable-selectors';
+import { WindowRefService } from '../window/window-ref.service';
 
-import {
-  AffixService
-} from '../affix/affix.service';
-
-import {
-  WindowRefService
-} from '../window/window-ref.service';
-
-import {
-  GD_FOCUSABLE_SELECTORS
-} from '../shared/focusable-selectors';
-
-import {
-  PopoverConfig
-} from './popover-config';
+import { PopoverConfig } from './popover-config';
 
 @Component({
   selector: 'gd-popover',
   templateUrl: './popover.component.html',
   styleUrls: ['./popover.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    AffixService
-  ]
 })
 export class PopoverComponent implements OnDestroy {
   public get closed(): Observable<void> {
@@ -53,13 +33,15 @@ export class PopoverComponent implements OnDestroy {
   public isVisible = false;
 
   @ViewChild('popover', { read: ElementRef, static: true })
-  private popoverRef: ElementRef;
+  private popoverRef: ElementRef | undefined;
 
   @ViewChild('target', { read: ViewContainerRef, static: true })
-  private targetRef: ViewContainerRef;
+  private targetRef: ViewContainerRef | undefined;
 
-  private config: PopoverConfig;
-  private focusableElements: any[];
+  private config: PopoverConfig | undefined;
+
+  private focusableElements: any[] = [];
+
   private ngUnsubscribe = new Subject();
 
   private _closed = new EventEmitter<void>();
@@ -67,8 +49,8 @@ export class PopoverComponent implements OnDestroy {
   constructor(
     private affixService: AffixService,
     private changeDetector: ChangeDetectorRef,
-    private windowRef: WindowRefService
-  ) { }
+    private windowRef: WindowRefService,
+  ) {}
 
   public ngOnDestroy(): void {
     this.ngUnsubscribe.next();
@@ -76,8 +58,8 @@ export class PopoverComponent implements OnDestroy {
     this._closed.complete();
   }
 
-  public attach(templateRef: TemplateRef<any>, config?: PopoverConfig): void {
-    this.targetRef.createEmbeddedView(templateRef);
+  public attach(templateRef: TemplateRef<any>, config: PopoverConfig): void {
+    this.targetRef!.createEmbeddedView(templateRef);
     this.config = config;
     this.addEventListeners();
     this.positionPopover();
@@ -91,15 +73,15 @@ export class PopoverComponent implements OnDestroy {
   }
 
   public focusHostElement(): void {
-    this.popoverRef.nativeElement.focus();
+    this.popoverRef!.nativeElement.focus();
   }
 
   public positionPopover(): void {
     this.windowRef.nativeWindow.setTimeout(() => {
       this.affixService.affixTo(
-        this.popoverRef,
-        this.config.trigger,
-        this.config.affix
+        this.popoverRef!,
+        this.config!.trigger,
+        this.config!.affix,
       );
 
       this.isVisible = true;
@@ -109,12 +91,12 @@ export class PopoverComponent implements OnDestroy {
 
   private assignFocusableElements(): void {
     const elements: HTMLElement[] = [].slice.call(
-      this.popoverRef.nativeElement.querySelectorAll(GD_FOCUSABLE_SELECTORS)
+      this.popoverRef!.nativeElement.querySelectorAll(GD_FOCUSABLE_SELECTORS),
     );
 
     const focusableElements = elements
-      .filter(element => this.isFocusable(element))
-      .filter(element => element.tabIndex !== -1);
+      .filter((element) => this.isFocusable(element))
+      .filter((element) => element.tabIndex !== -1);
 
     this.focusableElements = focusableElements;
   }
@@ -129,12 +111,12 @@ export class PopoverComponent implements OnDestroy {
   }
 
   private focusTriggerButton(): void {
-    this.config.trigger.nativeElement.focus();
+    this.config!.trigger.nativeElement.focus();
   }
 
   private addEventListeners(): void {
     const nativeWindow = this.windowRef.nativeWindow;
-    const popoverElement = this.popoverRef.nativeElement;
+    const popoverElement = this.popoverRef!.nativeElement;
 
     let isLastButtonFocused = false;
 
@@ -143,18 +125,8 @@ export class PopoverComponent implements OnDestroy {
       this.assignFocusableElements();
     });
 
-    // fromEvent(popoverElement, 'click')
-    //   .pipe(
-    //     takeUntil(this.ngUnsubscribe)
-    //   )
-    //   .subscribe((event: any) => {
-    //     event.stopPropagation();
-    //   });
-
     fromEvent(popoverElement, 'keydown')
-      .pipe(
-        takeUntil(this.ngUnsubscribe)
-      )
+      .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((event: any) => {
         const key = event.key.toLowerCase();
 
@@ -169,9 +141,7 @@ export class PopoverComponent implements OnDestroy {
 
     // Close the menu with escape key.
     fromEvent(popoverElement, 'keyup')
-      .pipe(
-        takeUntil(this.ngUnsubscribe)
-      )
+      .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((event: any) => {
         const key = event.key.toLowerCase();
         if (key === 'escape') {
@@ -181,31 +151,24 @@ export class PopoverComponent implements OnDestroy {
       });
 
     fromEvent(nativeWindow, 'scroll')
-      .pipe(
-        takeUntil(this.ngUnsubscribe)
-      )
+      .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(() => {
         this.positionPopover();
       });
 
     fromEvent(nativeWindow, 'resize')
-      .pipe(
-        takeUntil(this.ngUnsubscribe)
-      )
+      .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(() => {
         this.positionPopover();
       });
 
     // This will check if the focus leaves the document.
     fromEvent(popoverElement, 'focusin')
-      .pipe(
-        takeUntil(this.ngUnsubscribe)
-      )
+      .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((event: any) => {
-        isLastButtonFocused = (
+        isLastButtonFocused =
           event.target ===
-          this.focusableElements[this.focusableElements.length - 1]
-        );
+          this.focusableElements[this.focusableElements.length - 1];
       });
   }
 }

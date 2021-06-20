@@ -31,38 +31,56 @@ $gd-line-height-reduced: 1.2 !default;
 }
 
 // PRIMARY
-$gd-color-primary: #272A45 !default;
-$gd-background-color-primary: desaturate(lighten($gd-color-primary, 45%), 15%) !default;
+$gd-color-primary: #272a45 !default;
+$gd-background-color-primary: desaturate(
+  lighten($gd-color-primary, 45%),
+  15%
+) !default;
 $gd-border-color-primary: border_color($gd-color-primary) !default;
 $gd-text-color-primary: text_color($gd-color-primary) !default;
 
 // SECONDARY
-$gd-color-secondary: #A9139D !default;
-$gd-background-color-secondary: desaturate(lighten($gd-color-secondary, 45%), 15%) !default;
+$gd-color-secondary: #a9139d !default;
+$gd-background-color-secondary: desaturate(
+  lighten($gd-color-secondary, 45%),
+  15%
+) !default;
 $gd-border-color-secondary: border_color($gd-color-secondary) !default;
 $gd-text-color-secondary: text_color($gd-color-secondary) !default;
 
 // INFO
-$gd-color-info: #272A45 !default;
-$gd-background-color-info: desaturate(lighten($gd-color-info, 45%), 25%) !default;
+$gd-color-info: #272a45 !default;
+$gd-background-color-info: desaturate(
+  lighten($gd-color-info, 45%),
+  25%
+) !default;
 $gd-border-color-info: border_color($gd-color-info) !default;
 $gd-text-color-info: text_color($gd-color-info) !default;
 
 // SUCCESS
 $gd-color-success: #78905e !default;
-$gd-background-color-success: desaturate(lighten($gd-color-success, 55%), 65%) !default;
+$gd-background-color-success: desaturate(
+  lighten($gd-color-success, 55%),
+  65%
+) !default;
 $gd-border-color-success: border_color($gd-color-success) !default;
 $gd-text-color-success: text_color($gd-color-success) !default;
 
 // WARNING
-$gd-color-warning: #A9139D !default;
-$gd-background-color-warning: desaturate(lighten($gd-color-warning, 55%), 45%) !default;
+$gd-color-warning: #a9139d !default;
+$gd-background-color-warning: desaturate(
+  lighten($gd-color-warning, 55%),
+  45%
+) !default;
 $gd-border-color-warning: border_color($gd-color-warning) !default;
 $gd-text-color-warning: text_color($gd-color-warning) !default;
 
 // DANGER
 $gd-color-danger: rgb(186, 63, 86) !default;
-$gd-background-color-danger: desaturate(lighten($gd-color-danger, 55%), 55%) !default;
+$gd-background-color-danger: desaturate(
+  lighten($gd-color-danger, 55%),
+  55%
+) !default;
 $gd-border-color-danger: $gd-color-danger !default;
 $gd-text-color-danger: $gd-color-danger !default;
 
@@ -78,8 +96,14 @@ $gd-color-neutral-darkest: #000 !default;
 
 $gd-border-color-neutral: darken($gd-color-neutral, 5%) !default;
 $gd-border-color-neutral-light: darken($gd-color-neutral-light, 5%) !default;
-$gd-border-color-neutral-lighter: darken($gd-color-neutral-lighter, 5%) !default;
-$gd-border-color-neutral-lightest: darken($gd-color-neutral-lightest, 5%) !default;
+$gd-border-color-neutral-lighter: darken(
+  $gd-color-neutral-lighter,
+  5%
+) !default;
+$gd-border-color-neutral-lightest: darken(
+  $gd-color-neutral-lightest,
+  5%
+) !default;
 
 // TEXT COLOR
 $gd-text-color-default: #121620 !default;

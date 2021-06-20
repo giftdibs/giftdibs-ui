@@ -6,7 +6,7 @@ import {
   Injectable,
   Injector,
   OnDestroy,
-  Type
+  Type,
 } from '@angular/core';
 
 import { OverlayConfig } from './overlay-config';
@@ -14,17 +14,20 @@ import { OverlayDomAdapterService } from './overlay-dom-adapter.service';
 import { OverlayHostComponent } from './overlay-host.component';
 import { OverlayInstance } from './overlay-instance';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class OverlayService implements OnDestroy {
-  private host: ComponentRef<OverlayHostComponent>;
+  private host: ComponentRef<OverlayHostComponent> | undefined;
+
   private instances: OverlayInstance<any>[] = [];
 
   constructor(
     private adapter: OverlayDomAdapterService,
     private appRef: ApplicationRef,
     private injector: Injector,
-    private resolver: ComponentFactoryResolver
-  ) { }
+    private resolver: ComponentFactoryResolver,
+  ) {}
 
   public ngOnDestroy(): void {
     this.removeHostComponent();
@@ -32,13 +35,13 @@ export class OverlayService implements OnDestroy {
 
   public attach<T>(
     component: Type<T>,
-    config?: OverlayConfig
+    config?: OverlayConfig,
   ): OverlayInstance<T> {
     const defaults: OverlayConfig = {
       destroyOnOverlayClick: true,
       keepAfterNavigationChange: false,
       preventBodyScroll: false,
-      showBackdrop: false
+      showBackdrop: false,
     };
 
     const settings = Object.assign(defaults, config || {});
@@ -49,7 +52,7 @@ export class OverlayService implements OnDestroy {
       this.adapter.restrictBodyScroll();
     }
 
-    const instance = this.host.instance.attach(component, settings);
+    const instance = this.host!.instance.attach(component, settings);
 
     instance.destroyed.subscribe(() => {
       this.instances.splice(this.instances.indexOf(instance), 1);
@@ -68,7 +71,8 @@ export class OverlayService implements OnDestroy {
       .resolveComponentFactory(OverlayHostComponent)
       .create(this.injector);
 
-    const domElem = (componentRef.hostView as EmbeddedViewRef<any>).rootNodes[0];
+    const domElem = (componentRef.hostView as EmbeddedViewRef<any>)
+      .rootNodes[0];
 
     this.appRef.attachView(componentRef.hostView);
     this.adapter.appendToBody(domElem);

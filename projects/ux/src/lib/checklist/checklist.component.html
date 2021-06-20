@@ -1,10 +1,5 @@
-<ul
-  class="gd-checklist"
-  [gdHideUntil]="choices"
->
-  <li *ngFor="let choice of choices"
-    class="gd-checklist-item"
-  >
+<ul class="gd-checklist" [gdHideUntil]="choices.length > 0">
+  <li *ngFor="let choice of choices" class="gd-checklist-item">
     <gd-checkbox
       [disabled]="disabled"
       [value]="choice.value"

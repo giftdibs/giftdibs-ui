@@ -1,15 +1,16 @@
 <div class="gd-typeahead">
-  <ng-container *ngIf="!searchOnKeyUp else input">
+  <ng-container *ngIf="!searchOnKeyUp; else input">
     <div class="gd-input-group-inline">
       <ng-container *ngTemplateOutlet="input"></ng-container>
       <button
         class="gd-button gd-button-default"
         type="button"
         [disabled]="disabled"
-        (click)="onButtonClick();$event.stopPropagation();"
+        (click)="onButtonClick($event)"
       >
-        <ng-container *ngIf="!isLoading else loadingIcon">
-          <gd-icon *ngIf="searchButtonIcon"
+        <ng-container *ngIf="!isLoading; else loadingIcon">
+          <gd-icon
+            *ngIf="searchButtonIcon"
             iconSize="1x"
             [icon]="searchButtonIcon"
           >
@@ -17,12 +18,7 @@
           {{ searchButtonText }}
         </ng-container>
         <ng-template #loadingIcon>
-          <gd-icon
-            iconSize="1x"
-            icon="spinner"
-            [enableSpin]="true"
-          >
-          </gd-icon>
+          <gd-icon iconSize="1x" icon="spinner" [enableSpin]="true"> </gd-icon>
         </ng-template>
       </button>
     </div>
@@ -37,7 +33,7 @@
     [attr.aria-describedby]="ariaDescribedBy"
     [attr.placeholder]="placeholder"
     (focus)="searchInput.select()"
-    (keyup.enter)="onButtonClick();$event.stopPropagation();"
+    (keyup.enter)="onInputEnterKeyUp($event)"
     #searchInput
   />
 </ng-template>

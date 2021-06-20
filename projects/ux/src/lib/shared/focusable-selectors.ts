@@ -9,5 +9,5 @@ export const GD_FOCUSABLE_SELECTORS: string = [
   'select:not([disabled])',
   'textarea:not([disabled])',
   '[contenteditable=true]',
-  '[tabindex]'
+  '[tabindex]',
 ].join(', ');

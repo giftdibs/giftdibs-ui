@@ -24,12 +24,20 @@
 
 .gd-ribbon-primary {
   background: $gd-color-primary;
-  background: linear-gradient(45deg, $gd-color-primary 0%, $gd-color-secondary 100%);
+  background: linear-gradient(
+    45deg,
+    $gd-color-primary 0%,
+    $gd-color-secondary 100%
+  );
 }
 
 .gd-ribbon-secondary {
   background: $gd-color-secondary;
-  background: linear-gradient(45deg, $gd-color-danger 0%, $gd-color-secondary 100%);
+  background: linear-gradient(
+    45deg,
+    $gd-color-danger 0%,
+    $gd-color-secondary 100%
+  );
 }
 
 .gd-ribbon-success {

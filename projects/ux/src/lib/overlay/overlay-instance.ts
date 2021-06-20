@@ -1,13 +1,9 @@
-import {
-  EventEmitter
-} from '@angular/core';
+import { EventEmitter } from '@angular/core';
 
-import {
-  Observable
-} from 'rxjs';
+import { Observable } from 'rxjs';
 
 export class OverlayInstance<T> {
-  public componentInstance: T;
+  public componentInstance: T | undefined;
 
   // public get closed(): Observable<void> {
   //   return this._closed;

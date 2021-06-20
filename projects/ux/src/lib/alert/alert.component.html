@@ -10,7 +10,10 @@
   <div class="gd-alert-indicator">
     <gd-icon *ngIf="alert.type === 'success'" icon="check"></gd-icon>
     <gd-icon *ngIf="alert.type === 'info'" icon="question-circle"></gd-icon>
-    <gd-icon *ngIf="alert.type === 'danger'" icon="exclamation-triangle"></gd-icon>
+    <gd-icon
+      *ngIf="alert.type === 'danger'"
+      icon="exclamation-triangle"
+    ></gd-icon>
   </div>
   <div class="gd-alert-message">
     {{ alert.text }}

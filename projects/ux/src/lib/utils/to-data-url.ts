@@ -1,6 +1,6 @@
 // Convert URls to data URLS.
 // https://stackoverflow.com/a/20285053/6178885
-export function toDataUrl(url: string): Promise<string | ArrayBuffer> {
+export function toDataUrl(url: string): Promise<string | ArrayBuffer | null> {
   return new Promise((resolve) => {
     const xhr = new XMLHttpRequest();
     xhr.onload = () => {

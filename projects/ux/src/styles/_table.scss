@@ -3,7 +3,7 @@
 .gd-table {
   width: 100%;
   margin: $gd-spacing 0;
-  background-color: rgba(0,0,0,0.04);
+  background-color: rgba(0, 0, 0, 0.04);
   border: 0;
   border-radius: $gd-border-radius-sm;
 
@@ -18,7 +18,7 @@
     width: 1%;
     white-space: nowrap;
     font-weight: $gd-font-weight-bold;
-    background-color: rgba(0,0,0,0.02);
+    background-color: rgba(0, 0, 0, 0.02);
   }
 
   tr:last-child {

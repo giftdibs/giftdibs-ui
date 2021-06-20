@@ -30,7 +30,12 @@ a {
   }
 }
 
-h1, h2, h3, h4, h5, h6 {
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
   font-family: $gd-font-family-serif;
   line-height: $gd-line-height-reduced;
   margin-bottom: $gd-spacing;
@@ -58,7 +63,7 @@ strong {
 .gd-date {
   color: $gd-color-neutral-light;
   font-size: 11px;
-  letter-spacing: .2px;
+  letter-spacing: 0.2px;
   text-transform: lowercase;
 }
 
@@ -68,7 +73,7 @@ strong {
   height: 1px;
   padding: 0;
   overflow: hidden;
-  clip: rect(0,0,0,0);
+  clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   -webkit-clip-path: inset(50%);
   clip-path: inset(50%);

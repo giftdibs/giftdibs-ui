@@ -1,10 +1,7 @@
-<span *ngIf="icon && icon !== 'none'"
+<span
+  *ngIf="icon && icon !== 'none'"
   class="gd-icon"
   [ngClass]="'gd-icon-' + iconStyle"
 >
-  <i
-    class="fa fa-fw"
-    aria-hidden="true"
-    [ngClass]="classNames"
-  ></i>
+  <i class="fa fa-fw" aria-hidden="true" [ngClass]="classNames"></i>
 </span>

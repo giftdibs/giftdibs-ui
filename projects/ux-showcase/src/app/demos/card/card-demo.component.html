@@ -1,0 +1,87 @@
+<h1>Card</h1>
+
+<gd-row>
+  <gd-column [screenSmall]="4">
+    <gd-card (actionClick)="onActionClick()">
+      <gd-card-thumbnail>
+        <gd-thumbnail type="fill"> </gd-thumbnail>
+      </gd-card-thumbnail>
+      <gd-card-body>
+        <gd-card-heading [multiline]="false"> Some foo item </gd-card-heading>
+        <span class="gd-text-price"> $35 </span>
+        <br /><br />
+        <div class="gd-button-group">
+          <button class="gd-button gd-button-primary gd-button-block">
+            <gd-icon icon="plus"></gd-icon>
+            Add to wish list
+          </button>
+        </div>
+      </gd-card-body>
+    </gd-card>
+  </gd-column>
+</gd-row>
+
+<br /><br />
+
+<gd-row>
+  <gd-column
+    *ngFor="let item of items"
+    [screenXSmall]="6"
+    [screenSmall]="4"
+    [screenMedium]="4"
+  >
+    <div class="app-item">
+      <gd-card
+        [route]="{
+          commands: ['/gifts']
+        }"
+      >
+        <gd-ribbon *ngIf="item.isDibbed" ribbonType="secondary">
+          <gd-icon icon="check"></gd-icon>
+        </gd-ribbon>
+
+        <gd-ribbon *ngIf="item.isDelivered" ribbonType="primary">
+          <gd-icon icon="box"></gd-icon>
+        </gd-ribbon>
+
+        <gd-ribbon *ngIf="item.isReceived" ribbonType="primary">
+          <gd-icon icon="box-open"></gd-icon>
+        </gd-ribbon>
+        <gd-card-thumbnail>
+          <gd-thumbnail size="fill" [imageSource]="item.imageUrl">
+          </gd-thumbnail>
+        </gd-card-thumbnail>
+        <gd-card-body>
+          <gd-card-heading [multiline]="false">
+            {{ item.name }}
+          </gd-card-heading>
+          <span class="gd-text-price"> ${{ item.price }} </span>
+          <div class="app-item-user">
+            <gd-media size="xs">
+              <gd-media-content>
+                <div class="app-priority">
+                  <gd-icon icon="heart" iconStyle="secondary"></gd-icon>
+                  <gd-icon icon="heart" iconStyle="secondary"></gd-icon>
+                  <gd-icon icon="heart" iconStyle="secondary"></gd-icon>
+                  <gd-icon icon="heart" iconStyle="secondary"></gd-icon>
+                  <gd-icon
+                    icon="heart"
+                    iconStyle="secondary"
+                    style="opacity: 0.35"
+                  ></gd-icon>
+                </div>
+                <time class="gd-date"> 1 day ago </time>
+              </gd-media-content>
+              <gd-media-thumbnail>
+                <gd-thumbnail
+                  shape="circle"
+                  imageSource="https://giftdibs.s3.amazonaws.com/5bd26b69be29a6f2123a5ec5-7SVIqZcTbn2Idq7E8gVZAKLyYMJoX3do"
+                ></gd-thumbnail>
+              </gd-media-thumbnail>
+            </gd-media>
+          </div>
+        </gd-card-body>
+      </gd-card>
+    </div>
+  </gd-column>
+</gd-row>

@@ -3,7 +3,7 @@ import {
   ElementRef,
   HostListener,
   Input,
-  TemplateRef
+  TemplateRef,
 } from '@angular/core';
 
 import { AffixHorizontalAlignment } from '../affix/affix-horizontal-alignment';
@@ -15,17 +15,17 @@ import { DropdownMenuItem } from './dropdown-menu-item';
 import { DropdownMenuService } from './dropdown-menu.service';
 
 @Directive({
-  selector: '[gdDropdownMenuTrigger]'
+  selector: '[gdDropdownMenuTrigger]',
 })
 export class DropdownMenuTriggerDirective {
   @Input()
-  public menuHorizontalAlignment: AffixHorizontalAlignment;
+  public menuHorizontalAlignment: AffixHorizontalAlignment | undefined;
 
   @Input()
-  public menuVerticalAlignment: AffixVerticalAlignment;
+  public menuVerticalAlignment: AffixVerticalAlignment | undefined;
 
   @Input()
-  public menuItemTemplate: TemplateRef<any>;
+  public menuItemTemplate: TemplateRef<any> | undefined;
 
   @Input()
   public set menuItems(value: DropdownMenuItem[]) {
@@ -36,14 +36,14 @@ export class DropdownMenuTriggerDirective {
     return this._menuItems || [];
   }
 
-  private menuInstance: DropdownMenuInstance;
+  private menuInstance: DropdownMenuInstance | undefined;
 
-  private _menuItems: DropdownMenuItem[];
+  private _menuItems: DropdownMenuItem[] = [];
 
   constructor(
     private dropdownMenuService: DropdownMenuService,
-    private elementRef: ElementRef
-  ) { }
+    private elementRef: ElementRef,
+  ) {}
 
   @HostListener('click', ['$event'])
   public onClick(): void {
@@ -57,15 +57,15 @@ export class DropdownMenuTriggerDirective {
       affix: {},
       caller: this.elementRef,
       items: this.menuItems,
-      itemTemplate: this.menuItemTemplate
+      itemTemplate: this.menuItemTemplate,
     };
 
     if (this.menuHorizontalAlignment) {
-      config.affix.horizontalAlignment = this.menuHorizontalAlignment;
+      config.affix!.horizontalAlignment = this.menuHorizontalAlignment;
     }
 
     if (this.menuVerticalAlignment) {
-      config.affix.verticalAlignment = this.menuVerticalAlignment;
+      config.affix!.verticalAlignment = this.menuVerticalAlignment;
     }
 
     this.menuInstance = this.dropdownMenuService.open(config);

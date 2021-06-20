@@ -1,6 +1,4 @@
-import {
-  ModalClosedEventReason
-} from './modal-closed-event-reason';
+import { ModalClosedEventReason } from './modal-closed-event-reason';
 
 export interface ModalClosedEventArgs {
   reason: ModalClosedEventReason;

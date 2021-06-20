@@ -4,23 +4,17 @@ import {
   Component,
   Input,
   OnDestroy,
-  OnInit
+  OnInit,
 } from '@angular/core';
 
-import {
-  fromEvent,
-  Subject
-} from 'rxjs';
-
-import {
-  takeUntil
-} from 'rxjs/operators';
+import { fromEvent, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
   selector: 'gd-character-counter',
   templateUrl: './character-counter.component.html',
   styleUrls: ['./character-counter.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CharacterCounterComponent implements OnInit, OnDestroy {
   @Input()
@@ -34,17 +28,13 @@ export class CharacterCounterComponent implements OnInit, OnDestroy {
 
   private ngUnsubscribe = new Subject();
 
-  constructor(
-    private changeDetector: ChangeDetectorRef
-  ) { }
+  constructor(private changeDetector: ChangeDetectorRef) {}
 
   public ngOnInit(): void {
     this.checkRemaining();
 
     fromEvent(this.inputReference, 'keyup')
-      .pipe(
-        takeUntil(this.ngUnsubscribe)
-      )
+      .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(() => {
         this.checkRemaining();
       });

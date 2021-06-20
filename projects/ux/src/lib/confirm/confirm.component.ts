@@ -1,50 +1,40 @@
+import { AnimationEvent } from '@angular/animations';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  OnInit
+  OnInit,
 } from '@angular/core';
 
-import {
-  AnimationEvent
-} from '@angular/animations';
+import { gdAnimationEmerge } from '../animation/emerge';
 
-import {
-  gdAnimationEmerge
-} from '../animation/emerge';
-
-import {
-  ConfirmContext
-} from './confirm-context';
-
-import {
-  ConfirmAnswerType
-} from './confirm-answer-type';
+import { ConfirmAnswerType } from './confirm-answer-type';
+import { ConfirmContext } from './confirm-context';
 
 @Component({
   selector: 'gd-confirm',
   templateUrl: './confirm.component.html',
   styleUrls: ['./confirm.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  animations: [
-    gdAnimationEmerge
-  ]
+  animations: [gdAnimationEmerge],
 })
 export class ConfirmComponent implements OnInit {
-  public message: string;
-  public supplemental: string;
+  public message: string = '';
+
+  public supplemental: string | undefined;
 
   public get animationState(): string {
-    return (this.isOpen) ? 'open' : 'closed';
+    return this.isOpen ? 'open' : 'closed';
   }
 
-  private answerType: ConfirmAnswerType;
+  private answerType: ConfirmAnswerType = ConfirmAnswerType.Okay;
+
   private isOpen = true;
 
   constructor(
     private changeDetector: ChangeDetectorRef,
-    private context: ConfirmContext
-  ) { }
+    private context: ConfirmContext,
+  ) {}
 
   public ngOnInit(): void {
     this.message = this.context.config.message;
@@ -69,7 +59,7 @@ export class ConfirmComponent implements OnInit {
   public onAnimationDone(event: AnimationEvent): void {
     if (event.toState === 'closed') {
       this.context.answer({
-        type: this.answerType
+        type: this.answerType,
       });
     }
   }

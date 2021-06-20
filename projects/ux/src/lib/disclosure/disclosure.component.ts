@@ -1,7 +1,6 @@
 import {
   ChangeDetectionStrategy,
-  Component
-  // ChangeDetectorRef
+  Component, // ChangeDetectorRef
 } from '@angular/core';
 
 let nextId = 0;
@@ -10,15 +9,11 @@ let nextId = 0;
   selector: 'gd-disclosure',
   templateUrl: './disclosure.component.html',
   styleUrls: ['./disclosure.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class DisclosureComponent {
   public isOpen = false;
   public disclosureId = `gd-disclosure-${nextId++}`;
-
-  constructor(
-    // private changeDetector: ChangeDetectorRef
-  ) { }
 
   public toggleOpen(): void {
     this.isOpen = !this.isOpen;

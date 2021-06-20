@@ -9,23 +9,12 @@ import {
   OnInit,
   Type,
   ViewChild,
-  ViewContainerRef
+  ViewContainerRef,
 } from '@angular/core';
+import { NavigationStart, Router } from '@angular/router';
 
-import {
-  NavigationStart,
-  Router
-} from '@angular/router';
-
-import {
-  fromEvent,
-  Observable,
-  Subject
-} from 'rxjs';
-
-import {
-  takeUntil
-} from 'rxjs/operators';
+import { fromEvent, Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 import { OverlayConfig } from './overlay-config';
 import { OverlayInstance } from './overlay-instance';
@@ -34,7 +23,7 @@ import { OverlayInstance } from './overlay-instance';
   selector: 'gd-overlay',
   templateUrl: './overlay.component.html',
   styleUrls: ['./overlay.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class OverlayComponent implements OnInit, OnDestroy {
   public get destroyed(): Observable<void> {
@@ -45,10 +34,12 @@ export class OverlayComponent implements OnInit, OnDestroy {
   public showBackdrop = false;
 
   @ViewChild('target', { read: ViewContainerRef, static: true })
-  private targetRef: ViewContainerRef;
+  private targetRef: ViewContainerRef | undefined;
 
   private destroyOnOverlayClick = true;
-  private instance: OverlayInstance<any>;
+
+  private instance: OverlayInstance<any> | undefined;
+
   private ngUnsubscribe = new Subject<void>();
 
   private _destroyed = new Subject<void>();
@@ -58,17 +49,15 @@ export class OverlayComponent implements OnInit, OnDestroy {
     private elementRef: ElementRef,
     private injector: Injector,
     private resolver: ComponentFactoryResolver,
-    private router: Router
-  ) { }
+    private router: Router,
+  ) {}
 
   public ngOnInit(): void {
     fromEvent(this.elementRef.nativeElement, 'click')
-      .pipe(
-        takeUntil(this.ngUnsubscribe)
-      )
+      .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(() => {
         if (this.destroyOnOverlayClick) {
-          this.instance.destroy();
+          this.instance?.destroy();
         }
       });
   }
@@ -79,25 +68,32 @@ export class OverlayComponent implements OnInit, OnDestroy {
     this._destroyed.complete();
   }
 
-  public attach<T>(component: Type<T>, config: OverlayConfig): OverlayInstance<T> {
+  public attach<T>(
+    component: Type<T>,
+    config: OverlayConfig,
+  ): OverlayInstance<T> {
     const overlayInstance = new OverlayInstance<T>();
 
     const defaultProviders: any[] = [];
-    config.providers = defaultProviders.concat(config && config.providers || []);
+    config.providers = defaultProviders.concat(
+      (config && config.providers) || [],
+    );
 
     const injector = Injector.create({
       providers: config.providers,
-      parent: this.injector
+      parent: this.injector,
     });
 
     const factory = this.resolver.resolveComponentFactory(component);
-    const componentRef = this.targetRef.createComponent(factory, undefined, injector);
+    const componentRef = this.targetRef!.createComponent(
+      factory,
+      undefined,
+      injector,
+    );
 
     this.router.events
-      .pipe(
-        takeUntil(this.ngUnsubscribe)
-      )
-      .subscribe(event => {
+      .pipe(takeUntil(this.ngUnsubscribe))
+      .subscribe((event) => {
         if (event instanceof NavigationStart) {
           if (config.keepAfterNavigationChange) {
             config.keepAfterNavigationChange = false;
@@ -114,9 +110,10 @@ export class OverlayComponent implements OnInit, OnDestroy {
     });
 
     this.instance = overlayInstance;
-    this.allowClickThrough = (!config.showBackdrop && !config.destroyOnOverlayClick);
-    this.showBackdrop = config.showBackdrop;
-    this.destroyOnOverlayClick = config.destroyOnOverlayClick;
+    this.allowClickThrough =
+      !config.showBackdrop && !config.destroyOnOverlayClick;
+    this.showBackdrop = !!config.showBackdrop;
+    this.destroyOnOverlayClick = !!config.destroyOnOverlayClick;
     this.changeDetector.markForCheck();
 
     return overlayInstance;

@@ -4,42 +4,40 @@ import {
   Component,
   ElementRef,
   forwardRef,
-  OnInit,
-  ViewChild
+  ViewChild,
 } from '@angular/core';
-
-import {
-  ControlValueAccessor,
-  NG_VALUE_ACCESSOR
-} from '@angular/forms';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
 @Component({
   selector: 'gd-date-picker',
   templateUrl: './date-picker.component.html',
   styleUrls: ['./date-picker.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [{
-    provide: NG_VALUE_ACCESSOR,
-    /* tslint:disable-next-line:no-forward-ref */
-    useExisting: forwardRef(() => DatePickerComponent),
-    multi: true
-  }]
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      /* tslint:disable-next-line:no-forward-ref */
+      useExisting: forwardRef(() => DatePickerComponent),
+      multi: true,
+    },
+  ],
 })
-export class DatePickerComponent implements OnInit, ControlValueAccessor {
-  public get value(): Date {
+export class DatePickerComponent implements ControlValueAccessor {
+  public get value(): Date | undefined {
     return this._value;
   }
 
-  public set value(value: Date) {
+  public set value(value: Date | undefined) {
     this._value = value;
     this.onChange(value);
     this.onTouched();
   }
 
   public disabled = false;
+
   public years: number[] = [];
 
-  public months: {name: string, value: number}[] = [
+  public months: { name: string; value: number }[] = [
     { name: 'January', value: 1 },
     { name: 'February', value: 2 },
     { name: 'March', value: 3 },
@@ -51,29 +49,25 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor {
     { name: 'September', value: 9 },
     { name: 'October', value: 10 },
     { name: 'November', value: 11 },
-    { name: 'December', value: 12 }
+    { name: 'December', value: 12 },
   ];
 
   public days: number[] = [];
 
   @ViewChild('yearSelect', { static: true })
-  private yearSelect: ElementRef<any>;
+  private yearSelect: ElementRef<any> | undefined;
 
   @ViewChild('monthSelect', { static: true })
-  private monthSelect: ElementRef<any>;
+  private monthSelect: ElementRef<any> | undefined;
 
   @ViewChild('daySelect', { static: true })
-  private daySelect: ElementRef<any>;
+  private daySelect: ElementRef<any> | undefined;
 
-  private _value: Date;
+  private _value: Date | undefined;
 
-  constructor(
-    private changeDetector: ChangeDetectorRef
-  ) {
+  constructor(private changeDetector: ChangeDetectorRef) {
     this.setupFields();
   }
-
-  public ngOnInit(): void {}
 
   public writeValue(value: Date): void {
     if (typeof value === 'string') {
@@ -83,10 +77,12 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor {
     if (value) {
       this.value = value;
 
-      this.yearSelect.nativeElement.value = value.getFullYear();
-      this.monthSelect.nativeElement.value = value.getMonth();
-      this.daySelect.nativeElement.value = value.getDay();
-      this.changeDetector.markForCheck();
+      if (this.yearSelect && this.monthSelect && this.daySelect) {
+        this.yearSelect.nativeElement.value = value.getFullYear();
+        this.monthSelect.nativeElement.value = value.getMonth();
+        this.daySelect.nativeElement.value = value.getDay();
+        this.changeDetector.markForCheck();
+      }
     }
   }
 
@@ -126,7 +122,11 @@ export class DatePickerComponent implements OnInit, ControlValueAccessor {
     }
   }
 
-  private joinFieldValues(): Date {
+  private joinFieldValues(): Date | undefined {
+    if (!this.yearSelect || !this.monthSelect || !this.daySelect) {
+      return;
+    }
+
     const month = this.monthSelect.nativeElement.value;
     const day = this.daySelect.nativeElement.value;
     const year = this.yearSelect.nativeElement.value;

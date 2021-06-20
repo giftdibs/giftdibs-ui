@@ -1,41 +1,13 @@
-import {
-  NgModule
-} from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 
-import {
-  CommonModule
-} from '@angular/common';
+import { IconModule } from '../icon/icon.module';
+import { OverlayModule } from '../overlay/overlay.module';
 
-import {
-  IconModule
-} from '../icon/icon.module';
-
-import {
-  OverlayModule
-} from '../overlay/overlay.module';
-
-import {
-  AlertComponent
-} from './alert.component';
-
-import {
-  AlertService
-} from './alert.service';
+import { AlertComponent } from './alert.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    IconModule,
-    OverlayModule
-  ],
-  declarations: [
-    AlertComponent
-  ],
-  providers: [
-    AlertService
-  ],
-  entryComponents: [
-    AlertComponent
-  ]
+  imports: [CommonModule, IconModule, OverlayModule],
+  declarations: [AlertComponent],
 })
-export class AlertModule { }
+export class AlertModule {}

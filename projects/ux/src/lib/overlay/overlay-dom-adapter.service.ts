@@ -1,24 +1,19 @@
+import { Injectable, Renderer2, RendererFactory2 } from '@angular/core';
 
-import {
-  Injectable,
-  Renderer2,
-  RendererFactory2
-} from '@angular/core';
+import { WindowRefService } from '../window/window-ref.service';
 
-import {
-  WindowRefService
-} from '../window/window-ref.service';
-
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class OverlayDomAdapterService {
   private hostElement: any;
   private renderer: Renderer2;
 
   constructor(
     private rendererFactory: RendererFactory2,
-    private windowRef: WindowRefService
+    private windowRef: WindowRefService,
   ) {
-    this.renderer = this.rendererFactory.createRenderer(undefined, undefined);
+    this.renderer = this.rendererFactory.createRenderer(undefined, null);
   }
 
   public appendToBody(element: any): void {
@@ -36,14 +31,14 @@ export class OverlayDomAdapterService {
     this.renderer.setStyle(
       this.windowRef.nativeWindow.document.body,
       'overflow',
-      'hidden'
+      'hidden',
     );
   }
 
   public releaseBodyScroll(): void {
     this.renderer.removeStyle(
       this.windowRef.nativeWindow.document.body,
-      'overflow'
+      'overflow',
     );
   }
 }

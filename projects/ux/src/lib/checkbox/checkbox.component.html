@@ -1,7 +1,4 @@
-<div
-  class="gd-checkbox"
-  [ngClass]="{ 'gd-checkbox-checked': checked }"
->
+<div class="gd-checkbox" [ngClass]="{ 'gd-checkbox-checked': checked }">
   <span
     class="gd-checkbox-control"
     role="checkbox"
@@ -9,15 +6,9 @@
     [attr.aria-checked]="checked"
     [attr.aria-labelledby]="inputId"
   >
-    <gd-icon *ngIf="checked"
-      icon="check"
-    >
-    </gd-icon>
+    <gd-icon *ngIf="checked" icon="check"> </gd-icon>
   </span>
-  <span
-    class="gd-checkbox-label"
-    [id]="inputId"
-  >
+  <span class="gd-checkbox-label" [id]="inputId">
     <ng-content></ng-content>
   </span>
 </div>

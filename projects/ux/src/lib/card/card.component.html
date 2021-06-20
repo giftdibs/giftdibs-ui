@@ -7,16 +7,12 @@
       [fragment]="route.extras?.fragment"
       [queryParams]="route.extras?.queryParams"
       [queryParamsHandling]="route.extras?.queryParamsHandling"
-    ><ng-container *ngTemplateOutlet="content"></ng-container></a>
+      ><ng-container *ngTemplateOutlet="content"></ng-container
+    ></a>
   </ng-container>
 
   <ng-container *ngIf="!route && hasActionClick">
-    <div
-      class="gd-card-button"
-      role="button"
-      tabindex="0"
-      (click)="onClick()"
-    >
+    <div class="gd-card-button" role="button" tabindex="0" (click)="onClick()">
       <ng-container *ngTemplateOutlet="content"></ng-container>
     </div>
   </ng-container>

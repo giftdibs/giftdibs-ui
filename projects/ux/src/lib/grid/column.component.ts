@@ -3,38 +3,36 @@ import {
   Component,
   HostBinding,
   Input,
-  OnInit
+  OnInit,
 } from '@angular/core';
 
 @Component({
   selector: 'gd-column',
   templateUrl: './column.component.html',
   styleUrls: ['./column.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ColumnComponent implements OnInit {
   @Input()
-  public screenXXSmall: number;
+  public screenXXSmall: number = 12;
 
   @Input()
-  public screenXSmall: number;
+  public screenXSmall: number = 12;
 
   @Input()
-  public screenSmall: number;
+  public screenSmall: number = 12;
 
   @Input()
-  public screenMedium: number;
+  public screenMedium: number = 12;
 
   @Input()
-  public screenLarge: number;
+  public screenLarge: number = 12;
 
   @HostBinding('class')
-  public classNames: string;
+  public classNames: string = '';
 
   public getClassNames(): string {
-    const classNames = [
-      'gd-column'
-    ];
+    const classNames = ['gd-column'];
 
     if (this.screenXXSmall) {
       classNames.push(`gd-column-xxs-${this.screenXXSmall}`);

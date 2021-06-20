@@ -5,15 +5,13 @@ import {
   OnChanges,
   OnInit,
   Renderer2,
-  SimpleChanges
+  SimpleChanges,
 } from '@angular/core';
 
-import {
-  WindowRefService
-} from '../window/window-ref.service';
+import { WindowRefService } from '../window/window-ref.service';
 
 @Directive({
-  selector: '[gdHideUntil]'
+  selector: '[gdHideUntil]',
 })
 export class HideUntilDirective implements OnInit, OnChanges {
   @Input()
@@ -22,11 +20,15 @@ export class HideUntilDirective implements OnInit, OnChanges {
   constructor(
     private elementRef: ElementRef,
     private renderer: Renderer2,
-    private windowRef: WindowRefService
-  ) { }
+    private windowRef: WindowRefService,
+  ) {}
 
   public ngOnInit(): void {
-    this.renderer.setStyle(this.elementRef.nativeElement, 'transition', 'opacity 200ms');
+    this.renderer.setStyle(
+      this.elementRef.nativeElement,
+      'transition',
+      'opacity 200ms',
+    );
     // this.renderer.setStyle(this.elementRef.nativeElement, 'display', 'block');
     this.setOpacity(false);
     this.windowRef.nativeWindow.setTimeout(() => {
@@ -41,7 +43,7 @@ export class HideUntilDirective implements OnInit, OnChanges {
   }
 
   private setOpacity(isVisible: boolean): void {
-    const opacity = (isVisible) ? '1' : '0';
+    const opacity = isVisible ? '1' : '0';
     this.renderer.setStyle(this.elementRef.nativeElement, 'opacity', opacity);
   }
 }

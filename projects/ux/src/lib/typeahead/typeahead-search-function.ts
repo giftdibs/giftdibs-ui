@@ -1,5 +1,5 @@
-import {
-  Observable
-} from 'rxjs';
+import { Observable } from 'rxjs';
 
-export type TypeaheadSearchFunction<T> = (searchText: string) => Observable<T[]>;
+export type TypeaheadSearchFunction<T> = (
+  searchText: string,
+) => Observable<T[]>;

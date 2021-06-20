@@ -1,0 +1,74 @@
+<h1>Thumbnails</h1>
+
+<h2>All settings</h2>
+
+<gd-thumbnail
+  icon="trash"
+  iconSize="2x"
+  iconStyle="success"
+  shape="circle"
+  size="md"
+  [route]="{ commands: ['/'] }"
+>
+</gd-thumbnail>
+
+<h2>Default, no image</h2>
+
+<gd-thumbnail></gd-thumbnail>
+<gd-thumbnail shape="circle"></gd-thumbnail>
+
+<h2>Default, image</h2>
+
+<gd-thumbnail imageSource="assets/gd-logo.png"> </gd-thumbnail>
+
+<h2>Various sizes</h2>
+
+<gd-thumbnail imageSource="assets/gd-logo.png" size="xs"> </gd-thumbnail>
+
+<gd-thumbnail imageSource="assets/gd-logo.png" size="sm"> </gd-thumbnail>
+
+<gd-thumbnail imageSource="assets/gd-logo.png" size="md"> </gd-thumbnail>
+
+<gd-thumbnail imageSource="assets/gd-logo.png" size="lg"> </gd-thumbnail>
+
+<h2>This thumbnail fills its container</h2>
+<div style="width: 250px">
+  <gd-thumbnail imageSource="assets/gd-logo.png" size="fill"> </gd-thumbnail>
+</div>
+
+<h2>This thumbnail respects its image dimensions</h2>
+
+<gd-thumbnail imageSource="assets/gd-logo.png" size="static"> </gd-thumbnail>
+
+<gd-thumbnail size="static"> </gd-thumbnail>
+
+<h2>Shapes</h2>
+
+<gd-thumbnail imageSource="assets/gd-logo.png" shape="circle" size="xs">
+</gd-thumbnail>
+
+<gd-thumbnail imageSource="assets/gd-logo.png" shape="circle" size="sm">
+</gd-thumbnail>
+
+<gd-thumbnail imageSource="assets/gd-logo.png" shape="circle" size="md">
+</gd-thumbnail>
+
+<gd-thumbnail imageSource="assets/gd-logo.png" shape="circle" size="lg">
+</gd-thumbnail>
+
+<h2>This thumbnail fills its container</h2>
+<div style="width: 200px; height: 100px">
+  <gd-thumbnail imageSource="assets/gd-logo.png" shape="circle" size="fill">
+  </gd-thumbnail>
+</div>
+
+<h2>This thumbnail respects its image dimensions</h2>
+
+<gd-thumbnail imageSource="assets/gd-logo.png" shape="circle" size="static">
+</gd-thumbnail>
+
+<h2>Routes and URLs</h2>
+
+<gd-thumbnail size="md" [route]="{ commands: ['/'] }"> </gd-thumbnail>
+
+<gd-thumbnail externalLink="https://google.com" size="md"> </gd-thumbnail>

@@ -6,9 +6,7 @@
     #yearSelect
   >
     <option value="">Year</option>
-    <option *ngFor="let year of years"
-      [value]="year"
-    >{{ year }}</option>
+    <option *ngFor="let year of years" [value]="year">{{ year }}</option>
   </select>
 
   <select
@@ -18,20 +16,13 @@
     #monthSelect
   >
     <option value="">Month</option>
-    <option *ngFor="let month of months"
-      [value]="month.value"
-    >{{ month.name }}</option>
+    <option *ngFor="let month of months" [value]="month.value">
+      {{ month.name }}
+    </option>
   </select>
 
-  <select
-    name="day"
-    [disabled]="disabled"
-    (change)="onSelection()"
-    #daySelect
-  >
+  <select name="day" [disabled]="disabled" (change)="onSelection()" #daySelect>
     <option value="">Day</option>
-    <option *ngFor="let day of days"
-      [value]="day"
-    >{{ day }}</option>
+    <option *ngFor="let day of days" [value]="day">{{ day }}</option>
   </select>
 </div>

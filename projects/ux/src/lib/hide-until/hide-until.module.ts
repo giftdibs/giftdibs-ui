@@ -1,31 +1,11 @@
-import {
-  NgModule
-} from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 
-import {
-  CommonModule
-} from '@angular/common';
-
-import {
-  WindowRefService
-} from '../window/window-ref.service';
-
-import {
-  HideUntilDirective
-} from './hide-until.directive';
+import { HideUntilDirective } from './hide-until.directive';
 
 @NgModule({
-  imports: [
-    CommonModule
-  ],
-  exports: [
-    HideUntilDirective
-  ],
-  declarations: [
-    HideUntilDirective
-  ],
-  providers: [
-    WindowRefService
-  ]
+  imports: [CommonModule],
+  exports: [HideUntilDirective],
+  declarations: [HideUntilDirective],
 })
-export class HideUntilModule { }
+export class HideUntilModule {}

@@ -4,7 +4,8 @@
     role="tablist"
     [attr.aria-label]="ariaLabel"
   >
-    <button *ngFor="let button of tabButtons; let i = index;"
+    <button
+      *ngFor="let button of tabButtons; let i = index"
       class="gd-button gd-button-tab"
       role="tab"
       type="button"

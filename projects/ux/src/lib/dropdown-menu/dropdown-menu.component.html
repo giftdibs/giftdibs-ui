@@ -8,28 +8,30 @@
 >
   <ng-template ngFor let-item [ngForOf]="items">
     <li class="gd-dropdown-menu-item">
-      <div *ngIf="item.action"
+      <div
+        *ngIf="item.action"
         role="button"
         class="gd-button gd-dropdown-menu-item-button"
         tabindex="0"
         [attr.title]="item.label"
-        (click)="handleItemAction(item);"
-        (keydown.enter)="handleItemAction(item);$event.preventDefault();"
+        (click)="handleItemAction(item)"
+        (keydown.enter)="handleItemAction(item); $event.preventDefault()"
       >
         <ng-container
-          *ngTemplateOutlet="itemTemplate; context: { item: item }"
+          *ngTemplateOutlet="itemTemplate!; context: { item: item }"
         >
         </ng-container>
       </div>
       <ng-container *ngIf="!item.action">
-        <ng-container *ngIf="item.route else urlTemplate">
+        <ng-container *ngIf="item.route; else urlTemplate">
           <a
             class="gd-button gd-dropdown-menu-item-button"
             [attr.title]="item.label"
             [routerLink]="item.route"
           >
             <ng-container
-              *ngTemplateOutlet="itemTemplate; context: { item: item }">
+              *ngTemplateOutlet="itemTemplate!; context: { item: item }"
+            >
             </ng-container>
           </a>
         </ng-container>
@@ -40,7 +42,8 @@
             [attr.href]="item.url"
           >
             <ng-container
-              *ngTemplateOutlet="itemTemplate; context: { item: item }">
+              *ngTemplateOutlet="itemTemplate!; context: { item: item }"
+            >
             </ng-container>
           </a>
         </ng-template>
@@ -50,17 +53,14 @@
       *ngIf="item.addSeparatorAfter"
       class="gd-dropdown-menu-item-separator"
       role="separator"
-      tabindex="-1">
-    </li>
+      tabindex="-1"
+    ></li>
   </ng-template>
 </ul>
 
 <ng-template let-item="item" #defaultItemTemplate>
   <div class="gd-dropdown-menu-item-container">
-    <gd-icon
-      *ngIf="item.icon"
-      [icon]="item.icon">
-    </gd-icon>
+    <gd-icon *ngIf="item.icon" [icon]="item.icon"> </gd-icon>
     {{ item.label }}
   </div>
 </ng-template>

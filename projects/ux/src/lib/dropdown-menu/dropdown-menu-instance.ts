@@ -1,15 +1,8 @@
-import {
-  Observable,
-  Subject
-} from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
-import {
-  OverlayInstance
-} from '../overlay/overlay-instance';
+import { OverlayInstance } from '../overlay/overlay-instance';
 
-import {
-  DropdownMenuComponent
-} from './dropdown-menu.component';
+import { DropdownMenuComponent } from './dropdown-menu.component';
 
 export class DropdownMenuInstance {
   public componentInstance: DropdownMenuComponent;
@@ -20,10 +13,8 @@ export class DropdownMenuInstance {
 
   private _closed = new Subject<void>();
 
-  constructor(
-    private overlayInstance: OverlayInstance<DropdownMenuComponent>
-  ) {
-    this.componentInstance = this.overlayInstance.componentInstance;
+  constructor(private overlayInstance: OverlayInstance<DropdownMenuComponent>) {
+    this.componentInstance = this.overlayInstance.componentInstance!;
 
     this.overlayInstance.destroyed.subscribe(() => {
       this._closed.next();

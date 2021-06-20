@@ -6,12 +6,10 @@ import {
   OnDestroy,
   OnInit,
   TemplateRef,
-  ViewChild
+  ViewChild,
 } from '@angular/core';
 
-import {
-  Subject
-} from 'rxjs';
+import { Subject } from 'rxjs';
 
 import { TypeaheadResultsContext } from './typeahead-results-context';
 import { TypeaheadResultsSelectionChange } from './typeahead-results-selection-change';
@@ -20,13 +18,13 @@ import { TypeaheadResultsSelectionChange } from './typeahead-results-selection-c
   selector: 'gd-typeahead-results',
   templateUrl: './typeahead-results.component.html',
   styleUrls: ['./typeahead-results.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TypeaheadResultsComponent implements OnInit, OnDestroy {
   @ViewChild('resultsElementRef', { read: ElementRef, static: true })
-  public resultsElementRef: ElementRef<any>;
+  public resultsElementRef: ElementRef<any> | undefined;
 
-  public searchResultsEmptyMessage: string;
+  public searchResultsEmptyMessage: string = '';
 
   public get activeIndex(): number {
     return this._activeIndex;
@@ -60,20 +58,23 @@ export class TypeaheadResultsComponent implements OnInit, OnDestroy {
   }
 
   public isVisible = false;
+
   public templateRef: TemplateRef<any>;
+
   public selectionChange = new Subject<TypeaheadResultsSelectionChange>();
 
   private _activeIndex = 0;
-  private _results: any[];
+  private _results: any[] = [];
 
   constructor(
     private changeDetector: ChangeDetectorRef,
-    private context: TypeaheadResultsContext
-  ) { }
+    private context: TypeaheadResultsContext,
+  ) {
+    this.templateRef = this.context.templateRef;
+  }
 
   public ngOnInit(): void {
     this.results = this.context.results;
-    this.templateRef = this.context.templateRef;
     this.searchResultsEmptyMessage = this.context.searchResultsEmptyMessage;
   }
 
@@ -82,8 +83,12 @@ export class TypeaheadResultsComponent implements OnInit, OnDestroy {
   }
 
   public onResultClick(result: any): void {
-    const label = this.context.resultSelectedAction.call({}, result);
-    this.selectionChange.next({ result, label });
+    if (!result) {
+      return;
+    }
+
+    const x = this.context.resultSelectedAction.call({}, result);
+    this.selectionChange.next({ result, label: x?.resolvedSearchTerms || '' });
   }
 
   public hideResults(): void {

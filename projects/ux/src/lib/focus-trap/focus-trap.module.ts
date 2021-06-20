@@ -1,31 +1,11 @@
-import {
-  NgModule
-} from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 
-import {
-  CommonModule
-} from '@angular/common';
-
-import {
-  WindowRefService
-} from '../window/window-ref.service';
-
-import {
-  FocusTrapDirective
-} from './focus-trap.directive';
+import { FocusTrapDirective } from './focus-trap.directive';
 
 @NgModule({
-  imports: [
-    CommonModule
-  ],
-  exports: [
-    FocusTrapDirective
-  ],
-  declarations: [
-    FocusTrapDirective
-  ],
-  providers: [
-    WindowRefService
-  ]
+  imports: [CommonModule],
+  exports: [FocusTrapDirective],
+  declarations: [FocusTrapDirective],
 })
-export class FocusTrapModule { }
+export class FocusTrapModule {}

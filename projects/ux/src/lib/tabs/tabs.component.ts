@@ -4,24 +4,21 @@ import {
   Component,
   ContentChildren,
   Input,
-  QueryList
+  QueryList,
 } from '@angular/core';
 
-import {
-  TabComponent
-} from './tab.component';
+import { TabComponent } from './tab.component';
 
 let nextId = 0;
 
 @Component({
   selector: 'gd-tabs',
   templateUrl: './tabs.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TabsComponent implements AfterContentInit {
-
   @Input()
-  public ariaLabel: string;
+  public ariaLabel: string = '';
 
   public tabButtons: {
     ariaControls: string;
@@ -31,10 +28,10 @@ export class TabsComponent implements AfterContentInit {
   }[] = [];
 
   @ContentChildren(TabComponent)
-  private tabComponents: QueryList<TabComponent>;
+  private tabComponents: QueryList<TabComponent> | undefined;
 
   public ngAfterContentInit(): void {
-    this.tabButtons = this.tabComponents.map((tabComponent, i) => {
+    this.tabButtons = this.tabComponents!.map((tabComponent, i) => {
       const id = `gd-tab-${nextId++}`;
 
       tabComponent.ariaLabelledBy = id;
@@ -43,7 +40,7 @@ export class TabsComponent implements AfterContentInit {
         ariaControls: tabComponent.tabPanelId,
         ariaSelected: false,
         heading: tabComponent.tabHeading,
-        id: id
+        id: id,
       };
     });
 
@@ -51,8 +48,8 @@ export class TabsComponent implements AfterContentInit {
   }
 
   public activateTab(index: number): void {
-    this.tabComponents.forEach((tabComponent, i: number) => {
-      const isSelected = (i === index);
+    this.tabComponents!.forEach((tabComponent, i: number) => {
+      const isSelected = i === index;
       tabComponent.isVisible = isSelected;
       this.tabButtons[i].ariaSelected = isSelected;
 

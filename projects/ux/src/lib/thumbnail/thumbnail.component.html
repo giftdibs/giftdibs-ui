@@ -4,11 +4,11 @@
   [attr.title]="altText"
   [ngClass]="classNames"
 >
-  <ng-container *ngIf="(!route && !externalLink) else hasHref">
+  <ng-container *ngIf="!route && !externalLink; else hasHref">
     <ng-container *ngTemplateOutlet="image"></ng-container>
   </ng-container>
   <ng-template #hasHref>
-    <ng-container *ngIf="route else hasExternalLink">
+    <ng-container *ngIf="route; else hasExternalLink">
       <a
         class="gd-thumbnail-anchor"
         tabindex="0"
@@ -16,14 +16,13 @@
         [queryParams]="route.extras?.queryParams"
         [queryParamsHandling]="route.extras?.queryParamsHandling"
         [routerLink]="route.commands"
-      ><ng-container *ngTemplateOutlet="image"></ng-container></a>
+        ><ng-container *ngTemplateOutlet="image"></ng-container
+      ></a>
     </ng-container>
     <ng-template #hasExternalLink>
-      <a
-        class="gd-thumbnail-anchor"
-        tabindex="0"
-        [attr.href]="externalLink"
-      ><ng-container *ngTemplateOutlet="image"></ng-container></a>
+      <a class="gd-thumbnail-anchor" tabindex="0" [attr.href]="externalLink"
+        ><ng-container *ngTemplateOutlet="image"></ng-container
+      ></a>
     </ng-template>
   </ng-template>
 </div>
@@ -33,7 +32,8 @@
     class="gd-thumbnail-image-container"
     role="img"
     [ngStyle]="{
-      'background-image': (imageSource && size !== 'static') ? 'url(' + imageSource + ')' : ''
+      'background-image':
+        imageSource && size !== 'static' ? 'url(' + imageSource + ')' : ''
     }"
   >
     <ng-template [ngIf]="!imageSource">
@@ -43,7 +43,8 @@
         [iconStyle]="iconStyle"
       ></gd-icon>
     </ng-template>
-    <img *ngIf="size === 'static' && imageSource"
+    <img
+      *ngIf="size === 'static' && imageSource"
       class="gd-thumbnail-image"
       [attr.alt]="altText"
       [attr.src]="imageSource"

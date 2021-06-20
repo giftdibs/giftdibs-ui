@@ -3,5 +3,5 @@ export enum MediaQueryBreakpoint {
   XSmall = 'xs',
   Small = 'sm',
   Medium = 'md',
-  Large = 'lg'
+  Large = 'lg',
 }

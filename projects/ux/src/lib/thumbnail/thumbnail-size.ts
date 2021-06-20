@@ -4,5 +4,5 @@ export enum ThumbnailSize {
   Medium = 'md',
   Large = 'lg',
   Fill = 'fill',
-  Static = 'static'
+  Static = 'static',
 }

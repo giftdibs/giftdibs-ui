@@ -5,68 +5,47 @@ import {
   Input,
   OnDestroy,
   OnInit,
-  TemplateRef
+  TemplateRef,
 } from '@angular/core';
 
-import {
-  Subject
-} from 'rxjs';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
-import {
-  takeUntil
-} from 'rxjs/operators';
+import { AffixHorizontalAlignment } from '../affix/affix-horizontal-alignment';
+import { AffixVerticalAlignment } from '../affix/affix-vertical-alignment';
+import { OverlayInstance } from '../overlay/overlay-instance';
+import { OverlayService } from '../overlay/overlay.service';
 
-import {
-  OverlayInstance
-} from '../overlay/overlay-instance';
-
-import {
-  OverlayService
-} from '../overlay/overlay.service';
-
-import {
-  AffixHorizontalAlignment
-} from '../affix/affix-horizontal-alignment';
-
-import {
-  AffixVerticalAlignment
-} from '../affix/affix-vertical-alignment';
-
-import {
-  PopoverMessage
-} from './popover-message';
-
-import {
-  PopoverMessageType
-} from './popover-message-type';
-
-import {
-  PopoverComponent
-} from './popover.component';
+import { PopoverMessage } from './popover-message';
+import { PopoverMessageType } from './popover-message-type';
+import { PopoverComponent } from './popover.component';
 
 @Directive({
-  selector: '[gdPopover]'
+  selector: '[gdPopover]',
 })
 export class PopoverDirective implements OnInit, OnDestroy {
   @Input()
-  public gdPopover: TemplateRef<any>;
+  public gdPopover: TemplateRef<any> | undefined;
 
   @Input()
-  public gdPopoverHorizontalAlignment: AffixHorizontalAlignment;
+  public gdPopoverHorizontalAlignment:
+    | `${AffixHorizontalAlignment}`
+    | undefined;
 
   @Input()
-  public gdPopoverVerticalAlignment: AffixVerticalAlignment;
+  public gdPopoverVerticalAlignment: `${AffixVerticalAlignment}` | undefined;
 
   @Input()
   public gdPopoverMessageStream = new Subject<PopoverMessage>();
 
   private ngUnsubscribe = new Subject();
-  private overlayInstance: OverlayInstance<PopoverComponent>;
+
+  private overlayInstance: OverlayInstance<PopoverComponent> | undefined;
 
   constructor(
     private elementRef: ElementRef,
-    private overlayService: OverlayService
-  ) { }
+    private overlayService: OverlayService,
+  ) {}
 
   public ngOnInit(): void {
     if (this.gdPopoverMessageStream) {
@@ -89,12 +68,12 @@ export class PopoverDirective implements OnInit, OnDestroy {
       const key = event.key.toLowerCase();
 
       if (key === 'tab') {
-        this.overlayInstance.componentInstance.focusHostElement();
+        this.overlayInstance.componentInstance!.focusHostElement();
         event.preventDefault();
       }
 
       if (key === 'escape') {
-        this.overlayInstance.componentInstance.close();
+        this.overlayInstance.componentInstance!.close();
       }
     }
   }
@@ -102,28 +81,27 @@ export class PopoverDirective implements OnInit, OnDestroy {
   @HostListener('click')
   public onClick(): void {
     if (this.overlayInstance) {
-      this.overlayInstance.componentInstance.close();
+      this.overlayInstance.componentInstance!.close();
       return;
     }
 
-    this.overlayInstance = this.overlayService.attach(
-      PopoverComponent,
-      {
-        preventBodyScroll: false,
-        showBackdrop: true
-      }
-    );
-
-    this.overlayInstance.componentInstance.attach(this.gdPopover, {
-      trigger: this.elementRef,
-      affix: {
-        horizontalAlignment: this.gdPopoverHorizontalAlignment,
-        verticalAlignment: this.gdPopoverVerticalAlignment
-      }
+    this.overlayInstance = this.overlayService.attach(PopoverComponent, {
+      preventBodyScroll: false,
+      showBackdrop: true,
     });
 
-    this.overlayInstance.componentInstance.closed.subscribe(() => {
-      this.overlayInstance.destroy();
+    this.overlayInstance.componentInstance!.attach(this.gdPopover!, {
+      trigger: this.elementRef,
+      affix: {
+        horizontalAlignment: this
+          .gdPopoverHorizontalAlignment as AffixHorizontalAlignment,
+        verticalAlignment: this
+          .gdPopoverVerticalAlignment as AffixVerticalAlignment,
+      },
+    });
+
+    this.overlayInstance.componentInstance!.closed.subscribe(() => {
+      this.overlayInstance?.destroy();
     });
 
     this.overlayInstance.destroyed.subscribe(() => {
@@ -134,12 +112,12 @@ export class PopoverDirective implements OnInit, OnDestroy {
   private handleIncomingMessage(message: PopoverMessage): void {
     switch (message.type) {
       case PopoverMessageType.Reposition:
-      this.overlayInstance.componentInstance.positionPopover();
-      break;
+        this.overlayInstance?.componentInstance!.positionPopover();
+        break;
 
       case PopoverMessageType.Close:
-      this.overlayInstance.componentInstance.close();
-      break;
+        this.overlayInstance?.componentInstance!.close();
+        break;
     }
   }
 }

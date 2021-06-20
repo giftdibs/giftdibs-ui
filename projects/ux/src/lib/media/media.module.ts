@@ -1,10 +1,5 @@
-import {
-  NgModule
-} from '@angular/core';
-
-import {
-  CommonModule
-} from '@angular/common';
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 
 import { MediaBodyComponent } from './media-body.component';
 import { MediaContentComponent } from './media-content.component';
@@ -17,9 +12,7 @@ import { MediaThumbnailComponent } from './media-thumbnail.component';
 import { MediaComponent } from './media.component';
 
 @NgModule({
-  imports: [
-    CommonModule
-  ],
+  imports: [CommonModule],
   exports: [
     MediaComponent,
     MediaHeaderComponent,
@@ -29,7 +22,7 @@ import { MediaComponent } from './media.component';
     MediaControlsComponent,
     MediaListComponent,
     MediaSubheadingComponent,
-    MediaThumbnailComponent
+    MediaThumbnailComponent,
   ],
   declarations: [
     MediaComponent,
@@ -41,7 +34,7 @@ import { MediaComponent } from './media.component';
     MediaListComponent,
     MediaSubheadingComponent,
     MediaThumbnailComponent,
-    MediaSubheadingComponent
-  ]
+    MediaSubheadingComponent,
+  ],
 })
-export class MediaModule { }
+export class MediaModule {}

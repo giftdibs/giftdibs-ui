@@ -1,12 +1,9 @@
-import {
-  ChangeDetectionStrategy,
-  Component
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
   selector: 'gd-media-subheading',
   templateUrl: './media-subheading.component.html',
   styleUrls: ['./media-subheading.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class MediaSubheadingComponent { }
+export class MediaSubheadingComponent {}

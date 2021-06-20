@@ -1,33 +1,23 @@
-import {
-  NgModule
-} from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 
-import {
-  CommonModule
-} from '@angular/common';
-
-import {
-  IconModule
-} from '../icon/icon.module';
+import { IconModule } from '../icon/icon.module';
 
 import { DisclosureBodyComponent } from './disclosure-body.component';
 import { DisclosureHeadingComponent } from './disclosure-heading.component';
 import { DisclosureComponent } from './disclosure.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    IconModule
-  ],
+  imports: [CommonModule, IconModule],
   declarations: [
     DisclosureComponent,
     DisclosureHeadingComponent,
-    DisclosureBodyComponent
+    DisclosureBodyComponent,
   ],
   exports: [
     DisclosureComponent,
     DisclosureHeadingComponent,
-    DisclosureBodyComponent
-  ]
+    DisclosureBodyComponent,
+  ],
 })
-export class DisclosureModule { }
+export class DisclosureModule {}

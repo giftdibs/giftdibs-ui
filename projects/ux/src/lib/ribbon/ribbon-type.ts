@@ -1,4 +1,4 @@
 export enum RibbonType {
   Primary = 'primary',
-  Secondary = 'secondary'
+  Secondary = 'secondary',
 }

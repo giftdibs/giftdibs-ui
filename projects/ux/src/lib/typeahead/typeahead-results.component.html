@@ -6,12 +6,11 @@
   #resultsElementRef
 >
   <ul class="gd-typeahead-results-list">
-    <li *ngIf="!results || !results.length"
-      class="gd-typeahead-result"
-    >
+    <li *ngIf="!results || !results.length" class="gd-typeahead-result">
       {{ searchResultsEmptyMessage }}
     </li>
-    <li *ngFor="let result of results; let i = index;"
+    <li
+      *ngFor="let result of results; let i = index"
       class="gd-typeahead-result"
       [ngClass]="{ 'gd-typahead-result-active': i === activeIndex }"
       (mouseenter)="activeIndex = i"
@@ -20,9 +19,11 @@
         class="gd-typeahead-result-button"
         role="button"
         tabindex="0"
-        (click)="onResultClick(result);$event.preventDefault();"
+        (click)="onResultClick(result); $event.preventDefault()"
       >
-        <ng-container *ngTemplateOutlet="templateRef; context: { result: result }">
+        <ng-container
+          *ngTemplateOutlet="templateRef; context: { result: result }"
+        >
         </ng-container>
       </div>
     </li>

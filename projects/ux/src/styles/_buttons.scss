@@ -30,6 +30,7 @@
 
 .gd-button {
   @include gd_form_control();
+  box-shadow: $gd-box-shadow;
   display: inline-block;
   text-align: center;
   white-space: nowrap;
@@ -67,17 +68,11 @@
 }
 
 .gd-button-default {
-  @include gd-button-variant(
-    $gd-color-neutral-lighter,
-    $gd-text-color-default
-  );
+  @include gd-button-variant($gd-color-neutral-lighter, $gd-text-color-default);
 }
 
 .gd-button-primary {
-  @include gd-button-variant(
-    $gd-color-primary,
-    #fff
-  );
+  @include gd-button-variant($gd-color-primary, #fff);
 }
 
 .gd-button-danger {
@@ -113,16 +108,14 @@
 }
 
 .gd-button-facebook {
-  @include gd-button-variant(
-    $gd-color-brand-facebook,
-    #fff
-  );
+  @include gd-button-variant($gd-color-brand-facebook, #fff);
 }
 
 .gd-button-tab {
   background-color: transparent;
   color: $gd-text-color-deemphasized;
   border-radius: 100px;
+  box-shadow: none;
 
   &:hover,
   &:focus {

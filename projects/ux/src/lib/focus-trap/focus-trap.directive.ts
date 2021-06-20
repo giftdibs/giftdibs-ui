@@ -4,19 +4,14 @@ import {
   ElementRef,
   HostListener,
   Input,
-  OnDestroy
+  OnDestroy,
 } from '@angular/core';
 
-import {
-  GD_FOCUSABLE_SELECTORS
-} from '../shared/focusable-selectors';
-
-import {
-  WindowRefService
-} from '../window/window-ref.service';
+import { GD_FOCUSABLE_SELECTORS } from '../shared/focusable-selectors';
+import { WindowRefService } from '../window/window-ref.service';
 
 @Directive({
-  selector: '[gdFocusTrap]'
+  selector: '[gdFocusTrap]',
 })
 export class FocusTrapDirective implements AfterContentInit, OnDestroy {
   @Input()
@@ -38,14 +33,17 @@ export class FocusTrapDirective implements AfterContentInit, OnDestroy {
   }
 
   private _tabIndex = 0;
-  private focusableElements: any[];
+
+  private focusableElements: any[] = [];
+
   private isActive = false;
-  private observer: MutationObserver;
+
+  private observer: MutationObserver | undefined;
 
   constructor(
     private elementRef: ElementRef,
-    private windowRef: WindowRefService
-  ) { }
+    private windowRef: WindowRefService,
+  ) {}
 
   public ngAfterContentInit(): void {
     if (this.activateOnLoad) {
@@ -101,12 +99,12 @@ export class FocusTrapDirective implements AfterContentInit, OnDestroy {
 
   private assignFocusableElements(): void {
     const elements: HTMLElement[] = [].slice.call(
-      this.elementRef.nativeElement.querySelectorAll(GD_FOCUSABLE_SELECTORS)
+      this.elementRef.nativeElement.querySelectorAll(GD_FOCUSABLE_SELECTORS),
     );
 
     const focusableElements = elements
-      .filter(element => this.isVisible(element))
-      .filter(element => element.tabIndex !== -1);
+      .filter((element) => this.isVisible(element))
+      .filter((element) => element.tabIndex !== -1);
 
     this.focusableElements = focusableElements;
   }
@@ -121,7 +119,7 @@ export class FocusTrapDirective implements AfterContentInit, OnDestroy {
       attributes: true,
       childList: true,
       characterData: true,
-      subtree: true
+      subtree: true,
     });
   }
 

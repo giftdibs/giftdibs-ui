@@ -3,17 +3,11 @@ import {
   ChangeDetectorRef,
   Component,
   forwardRef,
-  Input
+  Input,
 } from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import {
-  ControlValueAccessor,
-  NG_VALUE_ACCESSOR
-} from '@angular/forms';
-
-import {
-  ChecklistChoice
-} from './checklist-choice';
+import { ChecklistChoice } from './checklist-choice';
 
 let nextUniqueId = 0;
 
@@ -22,16 +16,18 @@ let nextUniqueId = 0;
   templateUrl: './checklist.component.html',
   styleUrls: ['./checklist.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [{
-    provide: NG_VALUE_ACCESSOR,
-    /* tslint:disable-next-line:no-forward-ref */
-    useExisting: forwardRef(() => ChecklistComponent),
-    multi: true
-  }]
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      /* tslint:disable-next-line:no-forward-ref */
+      useExisting: forwardRef(() => ChecklistComponent),
+      multi: true,
+    },
+  ],
 })
 export class ChecklistComponent implements ControlValueAccessor {
   @Input()
-  public choices: ChecklistChoice[];
+  public choices: ChecklistChoice[] = [];
 
   @Input()
   public disabled = false;
@@ -49,11 +45,9 @@ export class ChecklistComponent implements ControlValueAccessor {
     this.changeDetector.markForCheck();
   }
 
-  private _value: any[];
+  private _value: any[] = [];
 
-  constructor(
-    private changeDetector: ChangeDetectorRef
-  ) { }
+  constructor(private changeDetector: ChangeDetectorRef) {}
 
   public onCheckboxChange(choice: ChecklistChoice, checked: boolean): void {
     if (checked) {
@@ -64,7 +58,7 @@ export class ChecklistComponent implements ControlValueAccessor {
   }
 
   public isChecked(choice: ChecklistChoice): boolean {
-    return (this.value.indexOf(choice.value) > -1);
+    return this.value.indexOf(choice.value) > -1;
   }
 
   public writeValue(value: any[]): void {

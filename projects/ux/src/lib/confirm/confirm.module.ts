@@ -1,36 +1,13 @@
-import {
-  NgModule
-} from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 
-import {
-  CommonModule
-} from '@angular/common';
-
-import {
-  OverlayModule
-} from '../overlay/overlay.module';
-
-import {
-  FocusTrapModule
-} from '../focus-trap/focus-trap.module';
+import { FocusTrapModule } from '../focus-trap/focus-trap.module';
+import { OverlayModule } from '../overlay/overlay.module';
 
 import { ConfirmComponent } from './confirm.component';
-import { ConfirmService } from './confirm.service';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    FocusTrapModule,
-    OverlayModule
-  ],
-  declarations: [
-    ConfirmComponent
-  ],
-  entryComponents: [
-    ConfirmComponent
-  ],
-  providers: [
-    ConfirmService
-  ]
+  imports: [CommonModule, FocusTrapModule, OverlayModule],
+  declarations: [ConfirmComponent],
 })
-export class ConfirmModule { }
+export class ConfirmModule {}

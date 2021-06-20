@@ -8,36 +8,33 @@ import {
   Input,
   OnDestroy,
   Output,
-  ViewChild
+  ViewChild,
 } from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import {
-  ControlValueAccessor,
-  NG_VALUE_ACCESSOR
-} from '@angular/forms';
-
-import {
-  ImageUploaderOrientation
-} from './image-uploader-orientation';
+import { ImageUploaderOrientation } from './image-uploader-orientation';
 
 @Component({
   selector: 'gd-image-uploader',
   templateUrl: './image-uploader.component.html',
   styleUrls: ['./image-uploader.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [{
-    provide: NG_VALUE_ACCESSOR,
-    /* tslint:disable-next-line:no-forward-ref */
-    useExisting: forwardRef(() => ImageUploaderComponent),
-    multi: true
-  }]
+  providers: [
+    {
+      provide: NG_VALUE_ACCESSOR,
+      /* tslint:disable-next-line:no-forward-ref */
+      useExisting: forwardRef(() => ImageUploaderComponent),
+      multi: true,
+    },
+  ],
 })
 export class ImageUploaderComponent implements OnDestroy, ControlValueAccessor {
   @Input()
   public allowUrl = true;
 
   @Input()
-  public orientation: ImageUploaderOrientation = ImageUploaderOrientation.Horizontal;
+  public orientation: `${ImageUploaderOrientation}` =
+    ImageUploaderOrientation.Horizontal;
 
   public get value(): string {
     return this._value;
@@ -48,7 +45,8 @@ export class ImageUploaderComponent implements OnDestroy, ControlValueAccessor {
   }
 
   public disabled = false;
-  public imageSource: string;
+
+  public imageSource: string = '';
 
   @Output()
   public selectFile = new EventEmitter<{ file: any }>();
@@ -59,14 +57,12 @@ export class ImageUploaderComponent implements OnDestroy, ControlValueAccessor {
   @Output()
   public urlButtonClick = new EventEmitter<void>();
 
-  @ViewChild('fileInput', { static: true })
-  public fileInput: ElementRef;
+  @ViewChild('fileInput')
+  public fileInput: ElementRef | undefined;
 
-  private _value: string;
+  private _value: string = '';
 
-  constructor(
-    private changeDetector: ChangeDetectorRef
-  ) { }
+  constructor(private changeDetector: ChangeDetectorRef) {}
 
   public ngOnDestroy(): void {
     this.selectFile.complete();
@@ -75,9 +71,11 @@ export class ImageUploaderComponent implements OnDestroy, ControlValueAccessor {
   }
 
   public triggerFileSelect(): void {
-    const input = this.fileInput.nativeElement;
-    input.value = '';
-    input.click();
+    if (this.fileInput) {
+      const input = this.fileInput.nativeElement;
+      input.value = '';
+      input.click();
+    }
   }
 
   public triggerUrlSelect(): void {

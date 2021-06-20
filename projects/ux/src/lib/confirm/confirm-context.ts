@@ -1,7 +1,4 @@
-import {
-  Observable,
-  Subject
-} from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 
 import { ConfirmAnswer } from './confirm-answer';
 import { ConfirmConfig } from './confirm-config';
@@ -13,9 +10,7 @@ export class ConfirmContext {
 
   private _answered = new Subject<ConfirmAnswer>();
 
-  constructor(
-    public config: ConfirmConfig
-  ) { }
+  constructor(public config: ConfirmConfig) {}
 
   public answer(answer: ConfirmAnswer): void {
     this._answered.next(answer);

@@ -1,20 +1,8 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  Input
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input } from '@angular/core';
+import { NavigationExtras } from '@angular/router';
 
-import {
-  NavigationExtras
-} from '@angular/router';
-
-import {
-  IconSize
-} from '../icon/icon-size';
-
-import {
-  IconStyle
-} from '../icon/icon-style';
+import { IconSize } from '../icon/icon-size';
+import { IconStyle } from '../icon/icon-style';
 
 import { ThumbnailShape } from './thumbnail-shape';
 import { ThumbnailSize } from './thumbnail-size';
@@ -23,7 +11,7 @@ import { ThumbnailSize } from './thumbnail-size';
   selector: 'gd-thumbnail',
   templateUrl: './thumbnail.component.html',
   styleUrls: ['./thumbnail.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ThumbnailComponent {
   @Input()
@@ -36,7 +24,7 @@ export class ThumbnailComponent {
       return this._icon;
     }
 
-    return (this.shape === ThumbnailShape.Circle) ? 'user' : 'image';
+    return this.shape === `${ThumbnailShape.Circle}` ? 'user' : 'image';
   }
 
   @Input()
@@ -55,44 +43,46 @@ export class ThumbnailComponent {
       case 'fill':
       case 'static':
       case 'lg':
-      size = '3x';
-      break;
+        size = '3x';
+        break;
 
       case 'md':
-      size = '2x';
-      break;
+        size = '2x';
+        break;
 
       default:
-      size = '1x';
-      break;
+        size = '1x';
+        break;
     }
 
     return size;
   }
 
   @Input()
-  public iconStyle: IconStyle;
+  public iconStyle: `${IconStyle}` = IconStyle.Default;
 
   @Input()
-  public imageSource: string;
+  public imageSource: string = '';
 
   @Input()
-  public route: {
-    commands: any[],
-    extras?: NavigationExtras;
-  };
+  public route:
+    | {
+        commands: any[];
+        extras?: NavigationExtras;
+      }
+    | undefined;
 
   @Input()
-  public externalLink: string;
+  public externalLink: string | undefined;
 
   @Input()
-  public size = ThumbnailSize.Static;
+  public size: `${ThumbnailSize}` = ThumbnailSize.Static;
 
   @Input()
-  public altText: string;
+  public altText: string = '';
 
   @Input()
-  public shape = ThumbnailShape.Default;
+  public shape: `${ThumbnailShape}` = ThumbnailShape.Default;
 
   public get classNames(): string {
     const classNames = [];
@@ -104,13 +94,14 @@ export class ThumbnailComponent {
     classNames.push(`gd-thumbnail-${this.shape}`);
     classNames.push(`gd-thumbnail-${this.size}`);
 
-    if (this.shape === ThumbnailShape.Circle) {
+    if (this.shape === `${ThumbnailShape.Circle}`) {
       classNames.push('gd-rounded-corners-circle');
     }
 
     return classNames.join(' ');
   }
 
-  private _icon: string;
-  private _iconSize: IconSize;
+  private _icon: string | undefined;
+
+  private _iconSize: IconSize = '1x';
 }

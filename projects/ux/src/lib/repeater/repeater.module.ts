@@ -1,30 +1,24 @@
 // #region imports
-import {
-  NgModule
-} from '@angular/core';
-
-import {
-  CommonModule
-} from '@angular/common';
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
 
 import { RepeaterControlsComponent } from './repeater-controls.component';
 import { RepeaterItemComponent } from './repeater-item.component';
 import { RepeaterComponent } from './repeater.component';
+
 // #endregion
 
 @NgModule({
-  imports: [
-    CommonModule
-  ],
+  imports: [CommonModule],
   exports: [
     RepeaterControlsComponent,
     RepeaterComponent,
-    RepeaterItemComponent
+    RepeaterItemComponent,
   ],
   declarations: [
     RepeaterControlsComponent,
     RepeaterComponent,
-    RepeaterItemComponent
-  ]
+    RepeaterItemComponent,
+  ],
 })
-export class RepeaterModule { }
+export class RepeaterModule {}

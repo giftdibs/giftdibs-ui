@@ -1,27 +1,21 @@
 <div class="gd-disclosure">
   <div class="gd-disclosure-header">
-    <div
-      class="gd-disclosure-heading-wrapper"
-      (click)="toggleOpen()"
-    >
+    <div class="gd-disclosure-heading-wrapper" (click)="toggleOpen()">
       <ng-content select="gd-disclosure-heading"></ng-content>
     </div>
     <button
       class="gd-button gd-button-link"
       type="button"
       [attr.aria-controls]="disclosureId"
-      [attr.aria-expanded]="(isOpen) ? true : false"
-      [attr.title]="(isOpen) ? 'Close' : 'Open'"
+      [attr.aria-expanded]="isOpen ? true : false"
+      [attr.title]="isOpen ? 'Close' : 'Open'"
       (click)="toggleOpen()"
     >
       <gd-icon *ngIf="isOpen" icon="chevron-up"></gd-icon>
       <gd-icon *ngIf="!isOpen" icon="chevron-down"></gd-icon>
     </button>
   </div>
-  <div
-    class="gd-dislosure-content"
-    [attr.id]="disclosureId"
-  >
+  <div class="gd-dislosure-content" [attr.id]="disclosureId">
     <ng-content *ngIf="isOpen" select="gd-disclosure-body"></ng-content>
   </div>
 </div>

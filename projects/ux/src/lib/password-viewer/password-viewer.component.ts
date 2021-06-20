@@ -2,33 +2,31 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  Input
+  Input,
 } from '@angular/core';
 
 @Component({
   selector: 'gd-password-viewer',
   templateUrl: './password-viewer.component.html',
   styleUrls: ['./password-viewer.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class PasswordViewerComponent {
   @Input()
-  public inputElement: HTMLInputElement;
+  public inputElement: HTMLInputElement | undefined;
 
   @Input()
   public disabled = false;
   public isVisible = false;
 
-  constructor(
-    private changeDetector: ChangeDetectorRef
-  ) { }
+  constructor(private changeDetector: ChangeDetectorRef) {}
 
   public togglePasswordInputType(): void {
-    if (this.inputElement.type === 'text') {
-      this.inputElement.type = 'password';
+    if (this.inputElement!.type === 'text') {
+      this.inputElement!.type = 'password';
       this.isVisible = false;
     } else {
-      this.inputElement.type = 'text';
+      this.inputElement!.type = 'text';
       this.isVisible = true;
     }
 

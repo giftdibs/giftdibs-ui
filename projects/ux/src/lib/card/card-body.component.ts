@@ -1,12 +1,9 @@
-import {
-  ChangeDetectionStrategy,
-  Component
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 @Component({
   selector: 'gd-card-body',
   templateUrl: './card-body.component.html',
   styleUrls: ['./card-body.component.scss'],
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CardBodyComponent { }
+export class CardBodyComponent {}

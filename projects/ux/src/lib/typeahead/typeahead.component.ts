@@ -8,31 +8,21 @@ import {
   Input,
   OnDestroy,
   TemplateRef,
-  ViewChild
+  ViewChild,
 } from '@angular/core';
+import { ControlValueAccessor, NG_VALUE_ACCESSOR } from '@angular/forms';
 
-import {
-  ControlValueAccessor,
-  NG_VALUE_ACCESSOR
-} from '@angular/forms';
-
-import {
-  fromEvent,
-  merge,
-  Subject
-} from 'rxjs';
-
+import { fromEvent, merge, Subject } from 'rxjs';
 import {
   debounceTime,
   distinctUntilChanged,
   finalize,
   takeUntil,
-  takeWhile
+  takeWhile,
 } from 'rxjs/operators';
 
 import { AffixVerticalAlignment } from '../affix/affix-vertical-alignment';
 import { AffixService } from '../affix/affix.service';
-
 import { OverlayConfig } from '../overlay/overlay-config';
 import { OverlayInstance } from '../overlay/overlay-instance';
 import { OverlayService } from '../overlay/overlay.service';
@@ -52,33 +42,32 @@ const KEYUP_DEBOUNCE_TIME = 400;
   styleUrls: ['./typeahead.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   providers: [
-    AffixService,
     TypeaheadDomAdapterService,
     {
       provide: NG_VALUE_ACCESSOR,
       /* tslint:disable-next-line:no-forward-ref */
       useExisting: forwardRef(() => TypeaheadComponent),
-      multi: true
-    }
-  ]
+      multi: true,
+    },
+  ],
 })
 export class TypeaheadComponent
-  implements AfterViewInit, OnDestroy, ControlValueAccessor {
+  implements AfterViewInit, OnDestroy, ControlValueAccessor
+{
+  @Input()
+  public ariaDescribedBy: string = '';
 
   @Input()
-  public ariaDescribedBy: string;
+  public placeholder: string = '';
 
   @Input()
-  public placeholder: string;
-
-  @Input()
-  public searchButtonIcon: string;
+  public searchButtonIcon: string | undefined;
 
   @Input()
   public searchButtonText = 'Search';
 
   @Input()
-  public searchFunction: TypeaheadSearchFunction<any>;
+  public searchFunction: TypeaheadSearchFunction<any> | undefined;
 
   @Input()
   public searchOnKeyUp = true;
@@ -87,10 +76,10 @@ export class TypeaheadComponent
   public searchResultsEmptyMessage = 'No results found.';
 
   @Input()
-  public searchResultTemplate: TemplateRef<any>;
+  public searchResultTemplate: TemplateRef<any> | undefined;
 
   @Input()
-  public searchResultAction: TypeaheadSearchResultAction<any>;
+  public searchResultAction: TypeaheadSearchResultAction | undefined;
 
   @Input()
   public set value(value: any) {
@@ -106,30 +95,35 @@ export class TypeaheadComponent
   public isLoading = false;
   public disabled = false;
 
-  @ViewChild('searchInput', { static: false })
-  private searchInput: ElementRef;
+  @ViewChild('searchInput')
+  private searchInput: ElementRef | undefined;
 
-  private _value: string;
+  private _value: string | undefined;
+
   private hasResults = false;
+
   private ngUnsubscribe = new Subject();
-  private overlayInstance: OverlayInstance<TypeaheadResultsComponent>;
+
+  private overlayInstance:
+    | OverlayInstance<TypeaheadResultsComponent>
+    | undefined;
 
   constructor(
     private affixService: AffixService,
     private changeDetector: ChangeDetectorRef,
     private elementRef: ElementRef,
     private domAdapter: TypeaheadDomAdapterService,
-    private overlayService: OverlayService
-  ) { }
+    private overlayService: OverlayService,
+  ) {}
 
   public ngAfterViewInit(): void {
-    const input = this.searchInput.nativeElement;
+    const input = this.searchInput!.nativeElement;
 
     fromEvent(input, 'keyup')
       .pipe(
         takeUntil(this.ngUnsubscribe),
         debounceTime(KEYUP_DEBOUNCE_TIME),
-        distinctUntilChanged()
+        distinctUntilChanged(),
       )
       .subscribe((event: any) => {
         if (this.searchOnKeyUp) {
@@ -142,11 +136,11 @@ export class TypeaheadComponent
             case 'arrowdown':
             case 'up':
             case 'down':
-            break;
+              break;
 
             default:
-            this.search();
-            break;
+              this.search();
+              break;
           }
         } else {
           // Update the value on keyup.
@@ -164,8 +158,16 @@ export class TypeaheadComponent
     this.ngUnsubscribe.complete();
   }
 
-  public onButtonClick(): void {
+  public onButtonClick(event: any): void {
+    event.stopPropagation();
     this.search();
+  }
+
+  public onInputEnterKeyUp(event: any): void {
+    event.stopPropagation();
+    if (!this.hasResults) {
+      this.search();
+    }
   }
 
   public writeValue(value: string): void {
@@ -179,10 +181,10 @@ export class TypeaheadComponent
   }
 
   // Angular automatically constructs these methods.
-  public onChange = (value: any) => {};
+  public onChange = (_: any) => {};
   public onTouched = () => {};
 
-  public registerOnChange(fn: (value: any) => void): void {
+  public registerOnChange(fn: (_: any) => void): void {
     this.onChange = fn;
   }
 
@@ -196,7 +198,7 @@ export class TypeaheadComponent
   }
 
   private search(): void {
-    const searchText = this.searchInput.nativeElement.value;
+    const searchText = this.searchInput!.nativeElement.value;
     if (searchText === this.value && this.hasResults) {
       return;
     }
@@ -205,14 +207,14 @@ export class TypeaheadComponent
     this.disabled = true;
     this.value = searchText;
 
-    this.searchFunction.call({}, searchText)
+    this.searchFunction!.call({}, searchText)
       .pipe(
         finalize(() => {
           this.isLoading = false;
           this.disabled = false;
           this.changeDetector.markForCheck();
         }),
-        takeUntil(this.ngUnsubscribe)
+        takeUntil(this.ngUnsubscribe),
       )
       .subscribe(
         (results: any[]) => {
@@ -220,7 +222,7 @@ export class TypeaheadComponent
             // No need to refresh the results if unchanged.
             if (
               this.overlayInstance &&
-              this.overlayInstance.componentInstance.results.length === 0
+              this.overlayInstance.componentInstance!.results.length === 0
             ) {
               if (this.hasResults) {
                 return;
@@ -229,7 +231,7 @@ export class TypeaheadComponent
           }
 
           if (this.hasResults) {
-            this.overlayInstance.componentInstance.results = results;
+            this.overlayInstance!.componentInstance!.results = results;
             this.positionResults();
             return;
           }
@@ -238,39 +240,45 @@ export class TypeaheadComponent
         },
         () => {
           // Swallow error for now.
-        }
+        },
       );
   }
 
   private showResults(results: any[]): void {
-    const resultsContext = new TypeaheadResultsContext();
-    resultsContext.results = results;
-    resultsContext.templateRef = this.searchResultTemplate;
-    resultsContext.resultSelectedAction = this.searchResultAction;
-    resultsContext.searchResultsEmptyMessage = this.searchResultsEmptyMessage;
+    const resultsContext: TypeaheadResultsContext = {
+      results,
+      templateRef: this.searchResultTemplate!,
+      resultSelectedAction: this.searchResultAction!,
+      searchResultsEmptyMessage: this.searchResultsEmptyMessage,
+    };
 
     const overlayConfig: OverlayConfig = {
-      providers: [{
-        provide: TypeaheadResultsContext,
-        useValue: resultsContext
-      }],
-      destroyOnOverlayClick: true
+      providers: [
+        {
+          provide: TypeaheadResultsContext,
+          useValue: resultsContext,
+        },
+      ],
+      destroyOnOverlayClick: true,
     };
 
     this.overlayInstance = this.overlayService.attach(
       TypeaheadResultsComponent,
-      overlayConfig
+      overlayConfig,
     );
 
     // Set the input value to what is selected in the dropdown.
-    this.overlayInstance.componentInstance.selectionChange
-      .subscribe((change: TypeaheadResultsSelectionChange) => {
+    this.overlayInstance.componentInstance!.selectionChange.subscribe(
+      (change: TypeaheadResultsSelectionChange) => {
         if (change.label !== undefined) {
-          this.searchInput.nativeElement.value = change.label;
+          this.searchInput!.nativeElement.value = change.label;
         }
 
-        this.overlayInstance.destroy();
-      });
+        if (this.overlayInstance) {
+          this.overlayInstance.destroy();
+        }
+      },
+    );
 
     this.hasResults = true;
     this.overlayInstance.destroyed.subscribe(() => {
@@ -294,72 +302,58 @@ export class TypeaheadComponent
   }
 
   private positionResults(): void {
-    this.overlayInstance.componentInstance.hideResults();
-    const resultsRef = this.overlayInstance.componentInstance.resultsElementRef;
+    const componentInstance = this.overlayInstance!.componentInstance!;
+
+    componentInstance.hideResults();
+    const resultsRef = componentInstance.resultsElementRef;
 
     setTimeout(() => {
-      this.affixService.affixTo(
-        resultsRef,
-        this.searchInput,
-        {
-          verticalAlignment: AffixVerticalAlignment.Bottom
-        }
-      );
+      this.affixService.affixTo(resultsRef!, this.searchInput!, {
+        verticalAlignment: AffixVerticalAlignment.Bottom,
+      });
 
-      this.domAdapter.matchWidth(
-        resultsRef,
-        this.elementRef
-      );
+      this.domAdapter.matchWidth(resultsRef!, this.elementRef);
 
-      this.overlayInstance.componentInstance.showResults();
+      componentInstance.showResults();
     });
   }
 
   private addEventListeners(): void {
-    const resultsComponent = this.overlayInstance.componentInstance;
+    const resultsComponent = this.overlayInstance?.componentInstance;
 
     merge(
-      fromEvent(window, 'scroll')
-        .pipe(
-          takeWhile(() => this.hasResults)
-        ),
-      fromEvent(window, 'resize')
-        .pipe(
-          takeWhile(() => this.hasResults)
-        )
+      fromEvent(window, 'scroll').pipe(takeWhile(() => this.hasResults)),
+      fromEvent(window, 'resize').pipe(takeWhile(() => this.hasResults)),
     ).subscribe(() => {
       this.positionResults();
     });
 
-    fromEvent(this.searchInput.nativeElement, 'keydown')
-      .pipe(
-        takeWhile(() => this.hasResults)
-      )
+    fromEvent(this.searchInput!.nativeElement, 'keyup')
+      .pipe(takeWhile(() => this.hasResults))
       .subscribe((event: any) => {
-        const key = event.key.toLowerCase();
+        const key = event.key.toLocaleUpperCase();
 
-        if (key === 'arrowdown' || key === 'down') {
-          resultsComponent.focusNextItem();
+        if (key === 'ARROWDOWN' || key === 'DOWN') {
+          resultsComponent!.focusNextItem();
         }
 
-        if (key === 'arrowup' || key === 'up') {
-          resultsComponent.focusPreviousItem();
+        if (key === 'ARROWUP' || key === 'UP') {
+          resultsComponent!.focusPreviousItem();
         }
 
-        if (key === 'tab' || key === 'escape') {
-          this.searchInput.nativeElement.value = '';
+        if (key === 'TAB' || key === 'ESCAPE') {
+          this.searchInput!.nativeElement.value = '';
           this.removeResults();
         }
 
-        if (key === 'enter') {
-          resultsComponent.triggerActiveResultAction();
+        if (key === 'ENTER') {
+          resultsComponent!.triggerActiveResultAction();
+          event.stopPropagation();
         }
       });
 
-    fromEvent(resultsComponent.resultsElementRef.nativeElement, 'click')
-      .pipe(
-        takeWhile(() => this.hasResults)
-      )
+    fromEvent(resultsComponent!.resultsElementRef!.nativeElement, 'click')
+      .pipe(takeWhile(() => this.hasResults))
       .subscribe((event: any) => {
         event.stopPropagation();
       });

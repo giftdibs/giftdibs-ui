@@ -1,14 +1,6 @@
-import {
-  NgModule
-} from '@angular/core';
-
-import {
-  CommonModule
-} from '@angular/common';
-
-import {
-  RouterModule
-} from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
 import { CardBodyComponent } from './card-body.component';
 import { CardControlsComponent } from './card-controls.component';
@@ -19,10 +11,7 @@ import { CardThumbnailComponent } from './card-thumbnail.component';
 import { CardComponent } from './card.component';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    RouterModule
-  ],
+  imports: [CommonModule, RouterModule],
   exports: [
     CardBodyComponent,
     CardComponent,
@@ -30,7 +19,7 @@ import { CardComponent } from './card.component';
     CardFooterComponent,
     CardHeaderComponent,
     CardHeadingComponent,
-    CardThumbnailComponent
+    CardThumbnailComponent,
   ],
   declarations: [
     CardBodyComponent,
@@ -39,7 +28,7 @@ import { CardComponent } from './card.component';
     CardFooterComponent,
     CardHeaderComponent,
     CardHeadingComponent,
-    CardThumbnailComponent
-  ]
+    CardThumbnailComponent,
+  ],
 })
-export class CardModule { }
+export class CardModule {}

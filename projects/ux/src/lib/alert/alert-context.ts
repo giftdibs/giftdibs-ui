@@ -1,7 +1,5 @@
 import { Alert } from './alert';
 
 export class AlertContext {
-  constructor(
-    public alert: Alert
-  ) { }
+  constructor(public alert: Alert) {}
 }

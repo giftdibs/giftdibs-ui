@@ -7,24 +7,16 @@ import {
   OnDestroy,
   OnInit,
   TemplateRef,
-  ViewChild
+  ViewChild,
 } from '@angular/core';
 
-import {
-  fromEvent,
-  Observable,
-  Subject
-} from 'rxjs';
-
-import {
-  takeUntil
-} from 'rxjs/operators';
+import { fromEvent, Observable, Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 import { AffixConfig } from '../affix/affix-config';
 import { AffixHorizontalAlignment } from '../affix/affix-horizontal-alignment';
 import { AffixVerticalAlignment } from '../affix/affix-vertical-alignment';
 import { AffixService } from '../affix/affix.service';
-
 import { WindowRefService } from '../window/window-ref.service';
 
 import { DropdownMenuContext } from './dropdown-menu-context';
@@ -35,28 +27,22 @@ import { DropdownMenuItem } from './dropdown-menu-item';
   templateUrl: './dropdown-menu.component.html',
   styleUrls: ['./dropdown-menu.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
-  providers: [
-    AffixService
-  ]
 })
-export class DropdownMenuComponent implements OnInit, AfterContentInit, OnDestroy {
+export class DropdownMenuComponent
+  implements OnInit, AfterContentInit, OnDestroy
+{
   public get closed(): Observable<void> {
     return this._closed;
   }
 
-  public set itemTemplate(value: TemplateRef<any>) {
-    this._itemTemplate = value;
-  }
-
-  public get itemTemplate(): TemplateRef<any> {
-    return this._itemTemplate || this.defaultItemTemplate;
-  }
+  public itemTemplate: TemplateRef<any> | undefined;
 
   public isVisible = false;
-  public items: any[];
+
+  public items: any[] = [];
 
   @ViewChild('defaultItemTemplate', { static: true })
-  private defaultItemTemplate: TemplateRef<any>;
+  private defaultItemTemplate: TemplateRef<any> | undefined;
 
   private get activeIndex(): number {
     return this._activeIndex;
@@ -74,27 +60,33 @@ export class DropdownMenuComponent implements OnInit, AfterContentInit, OnDestro
     this._activeIndex = value;
   }
 
-  private buttons: any[];
+  private buttons: any[] = [];
+
   private ngUnsubscribe = new Subject();
 
   private _activeIndex = -1;
+
   private _closed = new Subject<void>();
-  private _itemTemplate: TemplateRef<any>;
+
+  private _itemTemplate: TemplateRef<any> | undefined;
 
   @ViewChild('menuElementRef', { static: true })
-  private menuElementRef: ElementRef;
+  private menuElementRef: ElementRef | undefined;
 
   constructor(
     private affixService: AffixService,
     private changeDetector: ChangeDetectorRef,
     private context: DropdownMenuContext,
     private elementRef: ElementRef,
-    private windowRef: WindowRefService
-  ) { }
+    private windowRef: WindowRefService,
+  ) {}
 
   public ngOnInit(): void {
     this.items = this.context.config.items;
-    this.itemTemplate = this.context.config.itemTemplate;
+
+    this.itemTemplate =
+      this.context.config.itemTemplate || this.defaultItemTemplate!;
+
     this.addEventListeners();
     this.changeDetector.markForCheck();
   }
@@ -102,8 +94,10 @@ export class DropdownMenuComponent implements OnInit, AfterContentInit, OnDestro
   public ngAfterContentInit(): void {
     this.positionMenu();
     this.windowRef.nativeWindow.setTimeout(() => {
-      this.buttons = [].slice.call(this.elementRef.nativeElement.querySelectorAll('.gd-button'));
-      this.menuElementRef.nativeElement.focus();
+      this.buttons = [].slice.call(
+        this.elementRef.nativeElement.querySelectorAll('.gd-button'),
+      );
+      this.menuElementRef!.nativeElement.focus();
     });
   }
 
@@ -114,7 +108,10 @@ export class DropdownMenuComponent implements OnInit, AfterContentInit, OnDestro
   }
 
   public handleItemAction(item: DropdownMenuItem): void {
-    item.action();
+    if (item.action) {
+      item.action();
+    }
+
     this.close();
   }
 
@@ -131,15 +128,15 @@ export class DropdownMenuComponent implements OnInit, AfterContentInit, OnDestro
   private positionMenu(): void {
     const defaultAffixConfig: AffixConfig = {
       horizontalAlignment: AffixHorizontalAlignment.Left,
-      verticalAlignment: AffixVerticalAlignment.Bottom
+      verticalAlignment: AffixVerticalAlignment.Bottom,
     };
 
     this.changeDetector.detectChanges();
 
     this.affixService.affixTo(
-      this.menuElementRef,
+      this.menuElementRef!,
       this.context.config.caller,
-      Object.assign({}, defaultAffixConfig, this.context.config.affix)
+      Object.assign({}, defaultAffixConfig, this.context.config.affix),
     );
 
     this.isVisible = true;
@@ -154,9 +151,7 @@ export class DropdownMenuComponent implements OnInit, AfterContentInit, OnDestro
 
     // Close the menu with escape key.
     fromEvent(nativeWindow, 'keyup')
-      .pipe(
-        takeUntil(this.ngUnsubscribe)
-      )
+      .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((event: any) => {
         const key = event.key.toLowerCase();
         if (key === 'escape') {
@@ -166,9 +161,7 @@ export class DropdownMenuComponent implements OnInit, AfterContentInit, OnDestro
 
     // Navigate the items with arrow keys.
     fromEvent(hostElement, 'keydown')
-      .pipe(
-        takeUntil(this.ngUnsubscribe)
-      )
+      .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((event: any) => {
         const key = event.key.toLowerCase();
 
@@ -194,25 +187,20 @@ export class DropdownMenuComponent implements OnInit, AfterContentInit, OnDestro
 
     // This will check if the focus leaves the document.
     fromEvent(hostElement, 'focusin')
-      .pipe(
-        takeUntil(this.ngUnsubscribe)
-      )
+      .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe((event: any) => {
-        isLastButtonFocused = event.target === this.buttons[this.buttons.length - 1];
+        isLastButtonFocused =
+          event.target === this.buttons[this.buttons.length - 1];
       });
 
     fromEvent(nativeWindow, 'scroll')
-      .pipe(
-        takeUntil(this.ngUnsubscribe)
-      )
+      .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(() => {
         this.positionMenu();
       });
 
     fromEvent(nativeWindow, 'resize')
-      .pipe(
-        takeUntil(this.ngUnsubscribe)
-      )
+      .pipe(takeUntil(this.ngUnsubscribe))
       .subscribe(() => {
         this.positionMenu();
       });

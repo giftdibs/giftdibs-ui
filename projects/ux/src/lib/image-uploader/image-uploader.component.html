@@ -3,11 +3,7 @@
   [ngClass]="'gd-image-uploader-orientation-' + orientation"
 >
   <div class="gd-image-uploader-thumbnail">
-    <gd-thumbnail
-      size="static"
-      [imageSource]="imageSource"
-    >
-    </gd-thumbnail>
+    <gd-thumbnail size="static" [imageSource]="imageSource"> </gd-thumbnail>
   </div>
   <div class="gd-image-uploader-controls">
     <div class="gd-button-group">
@@ -18,14 +14,16 @@
       >
         Select image...
       </button>
-      <button *ngIf="allowUrl"
+      <button
+        *ngIf="allowUrl"
         class="gd-button gd-button-default"
         type="button"
         (click)="triggerUrlSelect()"
       >
         From external link...
       </button>
-      <button *ngIf="imageSource"
+      <button
+        *ngIf="imageSource"
         class="gd-button gd-button-default"
         title="Remove image"
         type="button"

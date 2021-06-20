@@ -1,41 +1,12 @@
-import {
-  NgModule
-} from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { NgModule } from '@angular/core';
+import { RouterModule } from '@angular/router';
 
-import {
-  CommonModule
-} from '@angular/common';
-
-import {
-  RouterModule
-} from '@angular/router';
-
-import {
-  WindowRefService
-} from '../window/window-ref.service';
-
-import { OverlayDomAdapterService } from './overlay-dom-adapter.service';
 import { OverlayHostComponent } from './overlay-host.component';
 import { OverlayComponent } from './overlay.component';
-import { OverlayService } from './overlay.service';
 
 @NgModule({
-  imports: [
-    CommonModule,
-    RouterModule
-  ],
-  declarations: [
-    OverlayComponent,
-    OverlayHostComponent
-  ],
-  entryComponents: [
-    OverlayComponent,
-    OverlayHostComponent
-  ],
-  providers: [
-    OverlayDomAdapterService,
-    OverlayService,
-    WindowRefService
-  ]
+  imports: [CommonModule, RouterModule],
+  declarations: [OverlayComponent, OverlayHostComponent],
 })
-export class OverlayModule { }
+export class OverlayModule {}
